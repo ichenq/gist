@@ -19,9 +19,7 @@ enum LanguageId : uint32_t
 go_template = """package proto
 
 // Auto-generated code, DO NOT EDIT!
-// Try modify `BeyondClient/Tool/ServerErrorCode/errno.xlsx`
 const (
-    ErrOK   uint32 = 0  //
 """
 
 # 读取excel
@@ -79,45 +77,53 @@ def write_xml(table, filepath):
     tree.write(filepath, encoding='utf-8', xml_declaration=True)
 
 
+# 计算最大长度
+def calc_max_len(table):
+    max_len = 0
+    for k, item in table.items():
+        name = item['Enum']
+        if len(name) > max_len:
+            max_len = len(name)
+    return max_len
+
+
+# 空格对齐
+def space_padding(text, min_len):
+    if len(text) < min_len:
+        for n in range(min_len - len(text)):
+            text += ' '
+    return text
+
+
 # 生成go源文件
-def gen_go_src(table, filepath):
+def gen_go_src(table, max_len, filepath):
     content = go_template
     keys = table.keys()
     keys.sort()
     for ec in keys:
         item = table[ec]
-        line = "\t%s\t\tuint32 = %d //%s\n" % (item['Enum'], ec, item['zhCN'])
+        name = item['Enum']
+        name = space_padding(name, max_len)
+        value = space_padding(str(ec), 6)
+        line = '\t%s uint32 = %s //%s\n' % (name, value, item['zhCN'])
         content += line
     content += "\n)"
     f = codecs.open(filepath, "w", "utf-8")
     f.write(content)
     f.close()
 
-    # Run go fmt if possible
-    path = os.getenv("GOROOT")
-    if path is not None:
-        cmd = "%sbin\go fmt %s" % (path, filepath)
-        os.system(cmd)
-    else:
-        print 'go fmt tool not found'
 
 # 生成C++头文件
-def gen_cpp_src(table, filepath):
-    max_len = 0
-    for k, item in table.items():
-        if len(item['Enum']) > max_len:
-            max_len = len(item['Enum'])
+def gen_cpp_src(table, max_len, filepath):
     content = cpp_template
     keys = table.keys()
     keys.sort()
     for ec in keys:
         item = table[ec]
-        enum = item['Enum']
-        line = '    ' + enum
-        pad_space = max_len - len(item['Enum'])
-        for n in range(pad_space):
-            line += ' '
-        line += " = %d,  // %s\n" % (ec, item['zhCN'])
+        name = item['Enum']
+        name = space_padding(name, max_len)
+        value = space_padding(str(ec), 6)
+        line = "    %s = %s,  // %s\n" % (name, value, item['zhCN'])
         content += line
     content += "\n};"
     f = codecs.open(filepath, "w", "utf-8")
@@ -127,9 +133,10 @@ def gen_cpp_src(table, filepath):
 
 def main(excelpath, xmlpath, gofile, cppfile):
     table = parse_excel(excelpath)
+    max_len = calc_max_len(table)
     write_xml(table, xmlpath)
-    gen_go_src(table, gofile)
-    gen_cpp_src(table, cppfile)
+    gen_go_src(table, max_len, gofile)
+    gen_cpp_src(table, max_len, cppfile)
 
 
 if __name__ == '__main__':
