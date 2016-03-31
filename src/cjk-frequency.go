@@ -1,4 +1,4 @@
-// CJK character freqency stats
+// CJK character frequency stats
 package main
 
 import (
@@ -27,14 +27,14 @@ func main() {
 	}
 	content := string(body)
 	fmt.Println(content)
-	stats := parseFreqency(content)
+	stats := parseFrequency(content)
 	fmt.Println("total cjk count: ", len(stats))
 	for _, v := range stats {
 		fmt.Printf("%s: 0x%x %d\n", string(v.char), v.char, v.freq)
 	}
 }
 
-func parseFreqency(content string) SortedStats {
+func parseFrequency(content string) SortedStats {
 	dict := map[rune]int{}
 	for _, char := range content {
 		if IsCJK(char) {
