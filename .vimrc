@@ -8,6 +8,8 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'fatih/vim-go'
+Plugin 'jimenezrick/vimerl'
+Plugin 'kien/ctrlp.vim'
 
 call vundle#end()
 filetype plugin indent on
