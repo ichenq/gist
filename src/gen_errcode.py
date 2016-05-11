@@ -3,6 +3,7 @@
 
 import os
 import codecs
+import argparse
 import openpyxl
 import xml.etree.ElementTree as ET
 
@@ -131,17 +132,28 @@ def gen_cpp_src(table, max_len, filepath):
     f.close()
 
 
-def main(excelpath, xmlpath, gofile, cppfile):
+def generate(excelpath, xmlpath, gofile, cppfile):
     table = parse_excel(excelpath)
     max_len = calc_max_len(table)
-    write_xml(table, xmlpath)
-    gen_go_src(table, max_len, gofile)
-    gen_cpp_src(table, max_len, cppfile)
+    write_xml(table, xmlpath)               # xml resource file
+    gen_go_src(table, max_len, gofile)      # go source file
+    gen_cpp_src(table, max_len, cppfile)    # cpp header file
+    
+
+def main():
+    def_excelpath = u"多语言错误码.xlsx"
+    def_xmlpath = u"networkError.xml"
+    def_gofile = u"errno.go"
+    def_cppfile = u"LanguageId.h"
+    parser = argparse.ArgumentParser(description="generate error code source")
+    parser.add_argument("-e", "--excel", help="excel file name", default=def_excelpath)
+    parser.add_argument("-x", "--xml", help="output xml resource file name", default=def_xmlpath)
+    parser.add_argument("-g", "--go", help="output go source file", default=def_gofile)
+    parser.add_argument("-c", "--cpp", help="output C++ header file", default=def_cppfile)
+    args = parser.parse_args()
+    generate(args.excel, args.xml, args.go, args.cpp)
 
 
 if __name__ == '__main__':
-    excelpath = u"多语言错误码.xlsx"
-    xmlpath = u"networkError.xml"
-    gofile = u"errno.go"
-    cppfile = u"LanguageId.h"
-    main(excelpath, xmlpath, gofile, cppfile)
+    main()
+
