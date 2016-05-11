@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*-coding:utf-8-*-
 #
-# pretty_source.py
-#   将include中的`\`改为`/`
+# pretty_slash.py
+#   将C++源文件中include路径的`\`改为`/`
 #
 # Usage:
-#   python pretty_source.py --dir=./
+#   python pretty_slash.py --dir=./
 #
 
 import argparse
@@ -23,23 +23,23 @@ def pretty_file(file_name):
             if line.startswith('#include') and line.find('\\') > 0:
                 line = line.replace('\\', '/')
                 modified = True
-            new_text_lines.append(line.rstrip())
+            new_text_lines.append(line)
 
     if modified:
-        print 'modified', filename
+        print 'modified', file_name
         with open(file_name, 'w') as fp:
             fp.writelines(new_text_lines)
 
     return modified
-
-
+    
 def pretty_dir(root_dir):
+	cpp_ext = ['.h', '.hpp', '.cpp', '.cc', '.cxx']
     process_num = 0
     for root, sub_folders, files in os.walk(root_dir):
         print root.split('/')[-1]
         for file_name in files:
             file_ext = os.path.splitext(file_name)[1]
-            if file_ext == '.h' or file_ext == '.cpp':
+            if file_ext in cpp_ext:
                 if pretty_file(root + '/' + file_name):
                     # print '\t' + file_name
                     process_num = process_num + 1
@@ -48,10 +48,11 @@ def pretty_dir(root_dir):
 
 def main():
     parser = argparse.ArgumentParser(description="")
-    parser.add_argument("-d", "--dir", help="project directory", default="./")
+    parser.add_argument("-d", "--dir", help="source code directory", default="./")
     args = parser.parse_args()
     pretty_dir(args.dir)
 
 
 if __name__ == '__main__':
     main()
+
