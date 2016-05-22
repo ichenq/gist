@@ -1,6 +1,9 @@
+// Copyright (C) 2016 ichenq@outlook.com. All rights reserved.
+// Distributed under the terms and conditions of the Apache License.
+// See accompanying files LICENSE.
 //
 // Josephus problem solution by circular list
-//
+
 #include <iostream>
 #include <assert.h>
 
