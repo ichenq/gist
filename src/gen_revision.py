@@ -32,27 +32,23 @@ func GetVersion() string {
 }
 """
 
-
-# generate go source file
-def generate_svn_source(info):
+# current SVN version information
+def gen_svn_infomation():
+    cmd = "svn info $GOPATH"
+    output = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).communicate()
+    assert output[1] == None # stderr
+    info = {}
+    for line in output[0].split('\n'):
+        items = line.split(': ')
+        if len(items) == 2:
+            info[items[0]] = items[1]
+    # generate go source file
     revision = info['Revision']
     date = info['Last Changed Date']
     date = date[:date.index('(')]
     content = svn_template % (revision, date)
     open('version.go', 'w').write(content)
 
-
-# current SVN version information
-def gen_svn_infomation():
-    cmd = "svn info $GOPATH"
-    output = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).communicate()
-    assert output[1] == None # stderr
-    infomation = {}
-    for line in output[0].split('\n'):
-        items = line.split(': ')
-        if len(items) == 2:
-            infomation[items[0]] = items[1]
-    return infomation
 
 
 # last git commit info
@@ -64,10 +60,12 @@ def gen_git_information():
     assert len(lines) >= 3
     commit = ''
     date = ''
-    if lines[0].startswith('commit '):
-        commit = lines[0][7:].strip()
-    if lines[2].startswith('Date:'):
-        date = lines[2][6:].strip()
+    for line in lines:
+        if line.startswith('commit '):
+            commit = line[7:].strip()
+        if line.startswith('Date:'):
+            date = line[6:].strip()
+
     assert len(commit) > 0
     assert len(date) > 0
     content = git_template % (commit, date)
@@ -75,26 +73,18 @@ def gen_git_information():
 
 
 # run command
-def run():
+def main():
     gopath = os.getenv('GOPATH')
     if not gopath.endswith('/'):
         gopath += '/'
 
-    # is svn repo
-    try:
-        f = open(gopath + '.svn')
-        f.close()
+    if os.path.exists(gopath + '.svn'): # is svn repo
+        print('svn repo detected')
         gen_svn_infomation()
-    except Exception as ex:
-        pass
-
-    # is git repo
-    try:
-        f = open(gopath + '.git')
-        f.close()
+    elif os.path.exists(gopath + '.git'): # is git repo
+        print('git repo detected')
         gen_git_information()
-    except Exception as ex:
-        pass
 
-run()
 
+if __name__ == '__main__':
+    main()
