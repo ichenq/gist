@@ -16,6 +16,7 @@ filetype plugin indent on
 
 set nu!
 set ts=4
+set shiftwidth=4
 set expandtab
 set nowrap
 set autoindent
