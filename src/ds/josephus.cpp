@@ -1,8 +1,6 @@
 // Copyright (C) 2016 ichenq@outlook.com. All rights reserved.
 // Distributed under the terms and conditions of the Apache License.
 // See accompanying files LICENSE.
-//
-// Josephus problem solution by circular list
 
 #include <iostream>
 #include <assert.h>
@@ -15,8 +13,8 @@ struct ListNode
     ListNode*   next = nullptr;
 };
 
-
-int RunJosephus(const int M, const int N)
+// a josephus problem solution with circular list
+int Josephus(const int M, const int N)
 {
     assert(M > 0 && N > 0);
     if (N == 1)

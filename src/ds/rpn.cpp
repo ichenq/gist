@@ -1,9 +1,6 @@
 // Copyright (C) 2016 ichenq@outlook.com. All rights reserved.
 // Distributed under the terms and conditions of the Apache License.
 // See accompanying files LICENSE.
-//
-// Postfix(Reverse Polish notation) and infix conversion
-//
 
 #include <assert.h>
 #include <stdio.h>
@@ -13,6 +10,10 @@
 #include <iostream>
 
 using namespace std;
+
+/*
+ * Postfix(Reverse Polish notation) and infix conversion
+ */
 
 // Assume an input of a correct, space separated, string of tokens of an RPN expression
 // eg. 3.59 4.99 2 * 1.79 5 - 2 3 ^ ^ / +

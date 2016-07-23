@@ -1,11 +1,9 @@
 // Copyright (C) 2016 ichenq@outlook.com. All rights reserved.
 // Distributed under the terms and conditions of the Apache License.
 // See accompanying files LICENSE.
-//
-// Two stack in an array
-//
 
 #include <array>
+
 
 struct Destroy 
 {
@@ -16,6 +14,7 @@ struct Destroy
     }
 };
 
+// Two stacks in an array
 template <typename T, size_t N>
 class ArrayStack
 {
