@@ -1,11 +1,13 @@
 // Copyright (C) 2016 ichenq@outlook.com. All rights reserved.
 // Distributed under the terms and conditions of the Apache License.
 // See accompanying files LICENSE.
-//
-// Check for balanced parentheses in an expression using stack
 
 #include <string>
 #include <stack>
+
+/*
+ * Check for balanced parentheses in an expression using stack
+ */
 
 
 inline bool ArePair(char opening, char closing)
