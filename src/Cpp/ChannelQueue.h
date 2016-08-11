@@ -70,12 +70,12 @@ public:
 
 private:
     T*                      data_ = nullptr;
-    size_t                  nelts_ = 0;             // # elements
-    size_t                  in_ = 0;                // next empty location
-    size_t                  out_ = 0;               // next filled location
-    const size_t            bounds_ = 0;            // max size of queue
-    size_t                  full_waiters_ = 0;
-    size_t                  empty_waiters_ = 0;
+    uint32_t                nelts_ = 0;             // # elements
+    uint32_t                in_ = 0;                // next empty location
+    uint32_t                out_ = 0;               // next filled location
+    const uint32_t          bounds_ = 0;            // max size of queue
+    uint32_t                full_waiters_ = 0;
+    uint32_t                empty_waiters_ = 0;
     std::mutex              one_big_mutex_;
     std::condition_variable not_empty_;
     std::condition_variable not_full_;
