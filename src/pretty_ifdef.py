@@ -1,75 +1,70 @@
 #!/usr/bin/python
 # -*-coding:utf-8-*-
 #
-# pretty_ifdef.py
-#   Convert #ifdef guard to #pragma once
-#   See http://stackoverflow.com/questions/1143936/pragma-once-vs-include-guards
+# replace_ifdef.py
 #
+#   Convert #ifdef guard to #pragma once
+#
+#   On most compilers, #pragma once will speed up compilation (of one cpp)
+#   because the compiler need not reopen the file containing this instruction
+#
+#   See http://stackoverflow.com/questions/1143936/pragma-once-vs-include-guards
+
 
 import argparse
 import sys
 import os
 
+
 cpp_header_ext = ['.h', '.hpp']
 
 
-def trim_empty_line(text_lines):
-    index = 0
-    while index < len(text_lines):
-        line = text_lines[index]
-        if len(line.strip()) == 0:
-            index += 1
-        else:
-            text_lines = text_lines[index:]
+# replace ifdef guard to `#pragma once`
+def replace_ifdef_guard(text_lines):
+    guard_line = -1
+    end_line = -1
+    for i in range(len(text_lines)):
+        line = text_lines[i].strip()
+        if line.startswith("#ifndef"):
+            guard = line[8:].strip()
+            nextline = text_lines[i+1]
+            if nextline.startswith("#define"):
+                name = nextline[8:].strip()
+                if guard == name:
+                    guard_line = i
             break
 
-    if len(text_lines) > 0:
-        index = len(text_lines) - 1
-        while index > 0:
-            line = text_lines[index]
-            if len(line.strip()) == 0:
-                index -= 1
-            else:
-                text_lines = text_lines[:index+1]
+    if guard_line >= 0:
+        for i in reversed(range(len(text_lines))):
+            line = text_lines[i].strip()
+            if line.startswith("#endif"):
+                end_line = i
+
                 break
+    if guard_line >= 0 and end_line >= 0:
+        assert end_line > guard_line
+        text_lines[guard_line] = "#pragma once\n"
+        del text_lines[guard_line+1]
+        del text_lines[end_line-1]
+        return text_lines, True
 
-    return text_lines
+    return text_lines, False
 
 
-# On most compilers, #pragma once will speed up compilation (of one cpp)
-# because the compiler need not reopen the file containing this instruction    
-def pretty_file(file_name):
-    modified = False
-    new_text_lines = []
-    fp = open(file_name, 'r')
+#
+def pretty_file(filename):
+    print(filename)
+    fp = open(filename, 'r')    # TO-DO: dectect file encoding 
     text_lines = fp.readlines()
     fp.close()
+
     if len(text_lines) < 3:
         return False
 
-    text_lines = trim_empty_line(text_lines)
-    first_line = text_lines[0]
-    second_line = text_lines[1]
-    if first_line.startswith("#ifndef"):
-        guard = first_line[8:].strip()
-        if second_line.startswith("#define"):
-            if guard == second_line[8:].strip():
-                modified = True
-                text_lines = text_lines[2:]
-
+    content, modified = replace_ifdef_guard(text_lines)
     if modified:
-        index = len(text_lines) - 1
-        while index > 0:
-            line = text_lines[index]
-            if line.startswith("#endif"):
-                text_lines = text_lines[:index]
-                break
-        # write to file
-        text_lines = trim_empty_line(text_lines)
-        lines = ['#pragma once\n', '\n']
-        lines.extend(text_lines)
-        f = open(file_name, 'w')
-        f.writelines(lines)
+        f = open(filename, 'w')
+        f.writelines(content)
         f.close()
 
     return modified
@@ -78,15 +73,15 @@ def pretty_file(file_name):
 def pretty_dir(root_dir):
     process_num = 0
     for root, sub_folders, files in os.walk(root_dir):
-        print root.split('/')[-1]
+        # print(root.split('/')[-1])
         for file_name in files:
             file_ext = os.path.splitext(file_name)[1]
             if file_ext in cpp_header_ext:
                 if pretty_file(root + '/' + file_name):
-                    print '\t' + file_name
+                    print('\t' + file_name)
                     process_num = process_num + 1
-                    break
-    print process_num, 'file processed.'
+
+    print(process_num, 'file processed.')
 
 
 def main():
