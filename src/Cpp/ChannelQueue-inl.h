@@ -12,7 +12,7 @@
 #include <assert.h>
 
 template <typename T>
-ChannelQueue<T>::ChannelQueue(size_t capacity)
+ChannelQueue<T>::ChannelQueue(uint32_t capacity)
     : bounds_(capacity)
 {
     data_ = new T[bounds_];
@@ -188,4 +188,15 @@ void ChannelQueue<T>::Terminate()
         terminated_ = true;
     }
     InterruptAll();
+}
+
+template <typename T>
+void ChannelQueue<T>::Reset()
+{
+    std::lock_guard<std::mutex> guard(one_big_mutex_);
+    terminated_ = false;
+    in_ = 0;
+    out_ = 0;
+    full_waiters_ = 0;
+    empty_waiters_ = 0;
 }

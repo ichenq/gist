@@ -26,12 +26,12 @@ enum Status
 };
 
 // Thread safe FIFO bounded queue, mocking golang's channel mechanism
-// see http://apr.apache.org/docs/apr-util/1.5/group___a_p_r___util___f_i_f_o.html
+// see http://svn.apache.org/repos/asf/apr/apr/trunk/util-misc/apr_queue.c
 template <typename T>
 class ChannelQueue
 {
 public:
-    explicit ChannelQueue(size_t capacity);
+    explicit ChannelQueue(uint32_t capacity);
     ~ChannelQueue();
     
     ChannelQueue(const ChannelQueue&) = delete;
@@ -56,11 +56,13 @@ public:
     // terminate the queue, sending an interrupt to all the blocking threads
     void Terminate();
 
+    void Reset();
+
     // queue capacity
-    size_t Capacity() const { return bounds_; }
+    uint32_t Capacity() const { return bounds_; }
 
     // count of elements
-    size_t Size() const { return nelts_; }
+    uint32_t Size() const { return nelts_; }
 
     // detects when the queue is full, not threadsafe
     bool IsFull() const { return nelts_ >= bounds_; }
