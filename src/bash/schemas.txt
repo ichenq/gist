@@ -1,0 +1,10 @@
+loris_character_01
+loris_character_02
+loris_character_03
+loris_localization
+loris_guild
+loris_battle
+loris_battlematch
+loris_mail
+loris_team
+loris_log
