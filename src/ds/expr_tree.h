@@ -21,8 +21,13 @@ struct BinaryTreeNode
     {}
 };
 
+// 中序遍历: left subtree -> root -> right subtree
 void InfixTraversal(const BinaryTreeNode* tree, std::ostream& out);
+
+// 后序遍历: left subtree -> right subtree -> root
 void PostfixTraversal(const BinaryTreeNode* tree, std::ostream& out);
+
+// 前序遍历: root -> left subtree -> right subtree
 void PrefixTraversal(const BinaryTreeNode* tree, std::ostream& out);
 
 void FreeTree(BinaryTreeNode*& tree);

@@ -87,7 +87,7 @@ BinaryTreeNode* ParsePostfixExpr(const std::string& expr)
     return stk.top();
 }
 
-void test()
+void unit_test()
 {
     const std::string expr = "5 1 2 + 4 ¡Á + 3 -";
     auto tree = ParsePostfixExpr(expr);
