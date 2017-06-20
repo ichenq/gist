@@ -7,11 +7,11 @@
 // Complexity: 
 //   N*log2(N^2) worst case
 //   N*log(N)    best case 
-template <typename Iter>
-void ShellSort(Iter p, int size)
+template <typename T>
+void ShellSort(T* p, int size)
 {
     // Marcin Ciura's gap sequence
-    const int gaps[] = {701, 301, 132, 57, 23, 10, 4, 1};
+    const int gaps[] = { 701, 301, 132, 57, 23, 10, 4, 1 };
     for (int gap : gaps)
     {
         for (int i = gap; i < size; i++)

@@ -15,28 +15,28 @@
 //	2) effcient for small data sets
 //	3) adaptive && online
 //	4) stable
-template <typename Iter>
-void InsertionSort(Iter p, int size)
+template <typename T>
+void InsertionSort(T* p, int size)
 {
-	for (int i = 1; i < size; i++)
-	{
-		for (int j = i; j > 0 && p[j - 1] > p[j]; j--)
-		{
-			std::swap(p[j], p[j - 1]);
-		}
-	}
+    for (int i = 1; i < size; i++)
+    {
+        for (int j = i; j > 0 && p[j - 1] > p[j]; j--)
+        {
+            std::swap(p[j], p[j - 1]);
+        }
+    }
 }
 
 void simple_test()
 {
-    int array[] = { 
-		83, 21, 93, 24, 40, 23, 46, 
-		75, 95, 93, 41, 51, 3, 79, 
-		67, 54, 79, 82, 46, 80, 
-	};    
+    int array[] = {
+        83, 21, 93, 24, 40, 23, 46,
+        75, 95, 93, 41, 51, 3, 79,
+        67, 54, 79, 82, 46, 80,
+    };
     const int N = sizeof(array) / sizeof(array[0]);
     InsertionSort(array, N);
-    for (int i = 0; i < N-1; i++) {
-        assert(array[i] < array[i+1]);
+    for (int i = 0; i < N - 1; i++) {
+        assert(array[i] < array[i + 1]);
     }
 }

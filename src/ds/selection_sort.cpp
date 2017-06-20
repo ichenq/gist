@@ -8,8 +8,8 @@
 #include <algorithm>
 
 // O(N^2) complexity
-template <typename Iter>
-void SelectionSort(Iter p, int size)
+template <typename T>
+void SelectionSort(T* p, int size)
 {
     for (int i = 0; i < size - 1; i++)
     {

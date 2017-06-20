@@ -9,8 +9,8 @@
 #include <algorithm>
 
 // bubble sort has worst-case and average complexity both О(n2)
-template <typename Iter>
-void BubbleSort(Iter p, int size) 
+template <typename T>
+void BubbleSort(T* p, int size) 
 {
     for (int n = size; n >= 0; n--) 
 	{
