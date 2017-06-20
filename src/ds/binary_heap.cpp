@@ -2,10 +2,12 @@
 // Distributed under the terms and conditions of the Apache License.
 // See accompanying files LICENSE.
 
+#include "binary_heap.h"
 #include <assert.h>
 #include <vector>
-#include <utility>
+#include <functional>
 #include <initializer_list>
+
 
 // binary min-heap
 template <typename T>
@@ -20,10 +22,7 @@ public:
     explicit BinaryHeap(std::initializer_list<T> l)
         : array_(l)
     {
-        int n = array_.size();
-        for (int i = n / 2 - 1; i >= 0; i--) {
-            down(i, n);
-        }
+        heapify(&array_[0], array_.size(), std::less<int>());
     }
 
     ~BinaryHeap()
@@ -35,14 +34,11 @@ public:
         return array_.size();
     }
 
-    // three steps to insert an item:
-    //  1) Add the element to the bottom level of the heap.
-    //  2) Compare the added element with its parent; if they are in the correct order, stop.
-    //  3) If not, swap the element with its parent and return to the previous step.
+
     void Push(const T& v)
     {
         array_.push_back(v);
-        up(array_.size() - 1);
+        heapUp(&array_[0], array_.size() - 1, std::less<int>());
     }
 
     // three steps to delete root item:
@@ -54,45 +50,10 @@ public:
         assert(!array_.empty());
         int n = array_.size() - 1;
         std::swap(array_[0], array_[n]);
-        down(0, n);
+        heapDown(&array_[0], 0, n, std::less<int>());
         T v = array_[n];
         array_.pop_back();
         return v;
-    }
-
-private:
-    void up(int j)
-    {
-        for (;;) {
-            int i = (j - 1) / 2; // parent
-            if (i == j || !(array_[j] < array_[i])) {
-                break;
-            }
-            std::swap(array_[i], array_[j]);
-            j = i;
-        }
-    }
-
-    bool down(int i0, int n)
-    {
-        int i = i0;
-        for (;;) {
-            int j1 = 2 * i + 1;
-            if (j1 >= n || j1 < 0) { // j1 < 0 after int overflow
-                break;
-            }
-            int j = j1; // left child
-            int j2 = j1 + 1; 
-            if (j2 < n && !(array_[j1] < array_[j2])) {
-                j = j2; // = 2 * i + 2 // right child
-            }
-            if (!(array_[j] < array_[i])) {
-                break;
-            }
-            std::swap(array_[i], array_[j]);
-            i = j;
-        }
-        return i > i0;
     }
 
 private:

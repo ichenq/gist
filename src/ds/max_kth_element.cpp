@@ -11,6 +11,7 @@
 #include <random>
 #include <algorithm>
 #include <functional>
+#include "binary_heap.h"
 
 // O(N^2) complexity
 // as simple as this code is
@@ -42,51 +43,6 @@ int MaxKthElementV2(const int input[], int N, int k)
         }
     }
     return vec[k - 1];
-}
-
-// min heap operation
-template <typename Pred>
-void heapUp(int arr[], int j, Pred less)
-{
-    for (;;) {
-        int i = (j - 1) / 2; // parent
-        if (i == j || !less(arr[j], arr[i])) {
-            break;
-        }
-        std::swap(arr[i], arr[j]);
-        j = i;
-    }
-}
-
-template <typename Pred>
-bool heapDown(int arr[], int i0, int n, Pred less)
-{
-    int i = i0;
-    for (;;) {
-        int j1 = 2 * i + 1;
-        if (j1 >= n || j1 < 0) { // j1 < 0 after int overflow
-            break;
-        }
-        int j = j1; // left child
-        int j2 = j1 + 1;
-        if (j2 < n && !less(arr[j1], arr[j2])) {
-            j = j2; // = 2 * i + 2 // right child
-        }
-        if (!less(arr[j], arr[i])) {
-            break;
-        }
-        std::swap(arr[i], arr[j]);
-        i = j;
-    }
-    return i > i0;
-}
-
-template <typename Pred>
-void heapify(int arr[], int n, Pred less)
-{
-    for (int i = n / 2 - 1; i >= 0; i--) {
-        heapDown(arr, i, n, less);
-    }
 }
 
 // O(N*logN)
