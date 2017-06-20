@@ -2,8 +2,9 @@
 // Distributed under the terms and conditions of the Apache License.
 // See accompanying files LICENSE.
 
-#include <array>
+#pragma once
 
+#include <array>
 
 struct Destroy 
 {
