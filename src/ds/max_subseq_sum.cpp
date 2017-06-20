@@ -1,7 +1,11 @@
-//
-// Max sub-sequence sum with different complexity
-//
+// Copyright (C) 2016 ichenq@outlook.com. All rights reserved.
+// Distributed under the terms and conditions of the Apache License.
+// See accompanying files LICENSE.
 
+
+/**
+ * Max sub-sequence sum with different complexity
+ */
 
 // O(N^3) complexity
 int MaxSubSequenceSumV1(const int array[], int n) {
