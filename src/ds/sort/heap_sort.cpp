@@ -12,7 +12,10 @@ template <typename T>
 void HeapSort(T* p, int size)
 {
     int n = size;
-    heapify(p, size, std::greater<T>());
+	// build heap with greatest element at top.
+    heapify(p, n, std::greater<T>());
+	
+	// pop elements, largest first, into end of data.
     while (n-- > 0) {
         std::swap(p[0], p[n]);
         heapDown(&p[0], 0, n, std::greater<T>());

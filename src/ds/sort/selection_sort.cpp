@@ -8,6 +8,8 @@
 #include <algorithm>
 
 // O(N^2) complexity
+// step 1: 找到数组中最小元素并将其和数组第一个元素交换位置
+// step 2: 在剩下的元素中找到最小元素并将其与数组第二个元素交换，直至整个数组排序
 template <typename T>
 void SelectionSort(T* p, int size)
 {

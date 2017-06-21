@@ -2,13 +2,13 @@
 // Distributed under the terms and conditions of the Apache License.
 // See accompanying files LICENSE.
 
-// bubble sort
+// bubble sort О(N^2) complexity
 // details see https://en.wikipedia.org/wiki/Bubble_sort
 
 #include <assert.h>
 #include <algorithm>
 
-// bubble sort has worst-case and average complexity both О(n2)
+// 持续比较相邻元素，大的挪到后面，因此大的会逐步往后挪，故称之为冒泡
 template <typename T>
 void BubbleSort(T* p, int size) 
 {
