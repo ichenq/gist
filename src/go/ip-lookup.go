@@ -9,22 +9,32 @@ import (
 	"time"
 )
 
+type LookupBaseInfo struct {
+	Country  string `json:"country"`
+	City     string `json:"city"`
+	County   string `json:"county"`
+	ISP      string `json:"isp"`
+	Province string `json:"province"`
+}
+
+type LookupNetInfo struct {
+	IsNTP   int `json:"is_ntp"`
+	NTPPort int `json:"Ntp_port"`
+	IsDNS   int `json:"Is_dns"`
+	DNSPort int `json:"Dns_port"`
+	IsProxy int `json:"Proxy_port"`
+	IsVPN   int `json:"Is_vpn"`
+	VPNPort int `json:"Vpn_port"`
+}
+
 type IPLookupResult struct {
-	ErrNum  int        `json:"errNum"`
-	ErrMsg  string     `json:"errMsg"`
-	RetData IPLocation `json:"retData"`
+	Status      int            `json:"Status"`
+	Description string         `json:"Description"`
+	BaseInfo    LookupBaseInfo `json:"Base_info"`
+	NetInfo     LookupNetInfo  `json:"Net_info"`
 }
 
-type IPLocation struct {
-	Ip       string `json:"ip"`       //IP地址
-	Country  string `json:"country"`  //国家
-	Province string `json:"province"` //省份
-	City     string `json:"city"`     //城市
-	District string `json:"district"` //地区
-	Carrier  string `json:"carrier"`  //运营商
-}
-
-//IP地址归属, http://apistore.baidu.com/apiworks/servicedetail/114.html
+//IP地址归属, http://apistore.baidu.com/apiworks/servicedetail/2367.html
 func GetIPLocation(ip string) string {
 	if strings.HasPrefix(ip, "127.0.0") || strings.HasPrefix(ip, "::1") {
 		return "Loopback"
@@ -32,7 +42,7 @@ func GetIPLocation(ip string) string {
 	if strings.HasPrefix(ip, "192.168") {
 		return "LAN"
 	}
-	url := `http://apis.baidu.com/apistore/iplookupservice/iplookup?ip=` + ip
+	url := `http://apis.baidu.com/bdyunfenxi/intelligence/ip?ip=` + ip
 	client := &http.Client{
 		Timeout: 15 * time.Second,
 	}
@@ -53,22 +63,21 @@ func GetIPLocation(ip string) string {
 		fmt.Println("ioutil.ReadAll:", err)
 		return "Unknown"
 	}
-	println(string(body))
+	fmt.Printf("%s\n", body)
 	var res IPLookupResult
 	if err := json.Unmarshal(body, &res); err != nil {
 		fmt.Println("json.Unmarshal:", err)
 		return "Unknown"
 	}
-	if res.ErrNum != 0 {
-		fmt.Println(res.ErrNum, res.ErrMsg)
+	if res.Status != 0 {
+		fmt.Println("error", res.Status)
 		return "Unknown"
 	}
-	location := res.RetData
-	fmt.Println(location)
-	return fmt.Sprintf("%s %s %s %s", location.Carrier, location.Province, location.City, location.District)
+	return fmt.Sprintf("%v", res.BaseInfo)
 }
 
 func main() {
 	ip := "171.213.60.165"
-	fmt.Println(GetIPLocation(ip))
+	info := GetIPLocation(ip)
+	fmt.Println(info)
 }
