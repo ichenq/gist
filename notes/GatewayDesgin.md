@@ -8,6 +8,7 @@
 ### 静态化
 
 gateway本身也是一个服务节点，但是作为分布式系统中的一个静态部分(static part)
+gateway提供给其它服务一个消息网关的服务层抽象
 
 所有节点开启后与gateway相连，服务A要与服务B通信时，A的消息先流向gateway，再由gateway流向B
 
