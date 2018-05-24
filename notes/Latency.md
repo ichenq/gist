@@ -32,3 +32,27 @@ ping ce.3bodygame.com
 
 64 bytes ICMP ttl=56 time=27.0 ms
 
+## AWS
+
+### client <--> DataCenter
+
+成都  --> AWS US Virginia
+
+ping 3body.makingga.me
+
+64 bytes ICMP ttl=128 time=248.964 ms
+
+### DataCenter <--> DataCenter
+
+阿里云上海 --> AWS US Virginia
+
+64 bytes ICMP ttl=128 time=219.957 ms
+
+AWS US Virginia --> 阿里云上海
+
+64 bytes ICMP ttl=128 time=270.232 ms
+
+
+
+
+
