@@ -1,6 +1,15 @@
+// Copyright © 2017 ichenq@outlook.com All Rights Reserved.
+//
+// Any redistribution or reproduction of part or all of the contents in any form
+// is prohibited.
+//
+// You may not, except with our express written permission, distribute or commercially
+// exploit the content. Nor may you transmit it or store it in any other website or
+// other form of electronic retrieval system.
+
 // +build !ignore
 
-package types
+package strutil
 
 import (
 	"bytes"
@@ -36,6 +45,72 @@ func TestFindString(t *testing.T) {
 	}
 	if FindString(array, "") >= 0 {
 		t.Fatalf("unexpected result")
+	}
+}
+
+func TestReverse(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{"", ""},
+		{"abc", "cba"},
+		{"a", "a"},
+		{"çınar", "ranıç"},
+		{"    yağmur", "rumğay    "},
+		{"επαγγελματίες", "ςείταμλεγγαπε"},
+	}
+
+	for i, test := range tests {
+		output := Reverse(test.input)
+		if test.expected != output {
+			t.Fatalf("Test case %d failed, expect %s, got %s", i, test.expected, output)
+		}
+	}
+}
+
+func TestValidatePhoneNumber(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected bool
+	}{
+		{"", false},
+		{"1abc", false},
+		{"+1a", false},
+		{"13156781234", true},
+		{"+8613156781234", true},
+		{"+13156781234", false},
+	}
+	for i, test := range tests {
+		output := ValidateCNPhoneNumber(test.input)
+		if test.expected != output {
+			t.Fatalf("Test case %d failed, %s, expect %v, got %v", i, test.input, test.expected, output)
+		}
+	}
+}
+
+func TestValidateEmailAddress(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected bool
+	}{
+		{"", false},
+		{"@", false},
+		{"@.com", false},
+		{"a.@a.com", false},
+		{"a@.com", false},
+		{"@a@.com", false},
+		{".a@.com", false},
+		{"a+b@.com", false},
+		{"a&b@.com", false},
+		{"abc@abc.com", true},
+		{"ab.c@abc.com", true},
+	}
+	for i, test := range tests {
+		output := ValidateEmailAddress(test.input)
+		if test.expected != output {
+			t.Fatalf("Test case %d failed, %s, expect %v, got %v", i, test.input, test.expected, output)
+		}
 	}
 }
 

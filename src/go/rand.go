@@ -1,37 +1,23 @@
-package types
+// Copyright © 2017 ichenq@outlook.com All Rights Reserved.
+//
+// Any redistribution or reproduction of part or all of the contents in any form
+// is prohibited.
+//
+// You may not, except with our express written permission, distribute or commercially
+// exploit the content. Nor may you transmit it or store it in any other website or
+// other form of electronic retrieval system.
+
+package mathutil
 
 import (
+	"math"
 	"math/rand"
-	"sync"
-	"time"
 )
 
-var (
-	lcgSeed int        = 0 //
-	mtx     sync.Mutex     //thread-safety
+const (
+	VerifyCodeMin = 100000
+	VerifyCodeMax = 999999
 )
-
-func init() {
-	//使用当前小时作为随机种子，使得不同的服务能产生大致相同的随机序列
-	var now = time.Now()
-	var sec = time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), 0, 0, 0, time.Local).Unix()
-	lcgSeed = int(sec)
-}
-
-// 线性同余法的随机数生成器
-// see https://en.wikipedia.org/wiki/Linear_congruential_generator
-func LCGRand() int {
-	mtx.Lock()
-	lcgSeed = lcgSeed*214013 + 2531011
-	mtx.Unlock()
-	return int(lcgSeed>>16) & 0x7fff
-}
-
-func SetLCGSeed(v int) {
-	mtx.Lock()
-	lcgSeed = v
-	mtx.Unlock()
-}
 
 // Random integer in [min, max]
 func RandInt(min, max int) int {
@@ -68,4 +54,68 @@ func RangePerm(min, max int) []int {
 		list[i] += min
 	}
 	return list
+}
+
+//四舍五入
+func RoundHalf(v float64) int {
+	return int(RoundFloat(v))
+}
+
+// https://github.com/montanaflynn/stats/blob/master/round.go
+func RoundFloat(x float64) float64 {
+	// If the float is not a number
+	if math.IsNaN(x) {
+		return math.NaN()
+	}
+
+	// Find out the actual sign and correct the input for later
+	sign := 1.0
+	if x < 0 {
+		sign = -1
+		x *= -1
+	}
+
+	// Get the actual decimal number as a fraction to be compared
+	_, decimal := math.Modf(x)
+
+	// If the decimal is less than .5 we round down otherwise up
+	var rounded float64
+	if decimal >= 0.5 {
+		rounded = math.Ceil(x)
+	} else {
+		rounded = math.Floor(x)
+	}
+
+	// Finally we do the math to actually create a rounded number
+	return rounded * sign
+}
+
+// Shuffle pseudo-randomizes the order of elements.
+// n is the number of elements. Shuffle panics if n < 0.
+// swap swaps the elements with indexes i and j.
+func Shuffle(n int, swap func(i, j int)) {
+	if n < 0 {
+		panic("invalid argument to Shuffle")
+	}
+
+	// Fisher-Yates shuffle: https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+	// Shuffle really ought not be called with n that doesn't fit in 32 bits.
+	// Not only will it take a very long time, but with 2³¹! possible permutations,
+	// there's no way that any PRNG can have a big enough internal state to
+	// generate even a minuscule percentage of the possible permutations.
+	// Nevertheless, the right API signature accepts an int n, so handle it as best we can.
+	i := n - 1
+	for ; i > 1<<31-1-1; i-- {
+		j := int(rand.Int63n(int64(i + 1)))
+		swap(i, j)
+	}
+	for ; i > 0; i-- {
+		j := int(rand.Int31n(int32(i + 1)))
+		swap(i, j)
+	}
+}
+
+// RandVerifyCode generate a random verify code
+func RandVerifyCode() int {
+	return rand.Intn(VerifyCodeMax-VerifyCodeMin) + VerifyCodeMin
 }

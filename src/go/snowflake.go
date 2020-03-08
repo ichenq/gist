@@ -1,13 +1,21 @@
+// Copyright © 2015-present prototyped.cn. All Rights Reserved.
+//
+// Any redistribution or reproduction of part or all of the contents in any form
+// is prohibited.
+//
+// You may not, except with our express written permission, distribute or commercially
+// exploit the content. Nor may you transmit it or store it in any other website or
+// other form of electronic retrieval system.
+//
 // Package snowflake implements Sonyflake, a distributed unique ID generator inspired by Twitter's Snowflake.
 //
 // A Snowflake ID is composed of
-//     39 bits for time in units of 10 msec
-//      8 bits for a sequence number
-//     16 bits for a machine id
-package snowflake
+//     39 bits for timestamp in centiseconds
+//     12 bits for a machine id
+//     10 bits for a sequence number
+package uuid
 
 import (
-	"errors"
 	"log"
 	"sync"
 	"time"
@@ -15,94 +23,94 @@ import (
 
 // These constants are the bit lengths of SnowFlake ID parts.
 const (
-	machineIDBits  = 16
-	sequenceBits   = 8
-	machineIDShift = sequenceBits
-	timestampShift = sequenceBits + machineIDBits
+	DefaultSequenceBits  = 10
+	DefaultMachineIDBits = 12
+	MachineSeqBitsLimit  = 24
 
-	twepoch           = 1415302200000000000 // custom epoch in nanosecond, (2014-11-06 19:30:00 UTC)
-	snowflakeTimeUnit = 1e7                 // nsec, i.e. 10 msec
+	Twepoch = 1569888000000000000 // custom epoch in nanosecond, (2019-10-01 00:00:00 UTC)
 )
 
-var (
-	ErrMachineIDOutOfRange = errors.New("machine ID out of range")
-	ErrTimeBackwards       = errors.New("time has gone backwards")
-	ErrIDBackwards         = errors.New("ID went backward")
-)
+func currentTimeUnit() int64 {
+	return int64(time.Now().UTC().UnixNano()-Twepoch) / 1e7 // nanoseconds to centiseconds
+}
 
 // Snowflake with locking
 type SnowFlake struct {
 	sync.Mutex
-	lastTime  uint64 // 39 bits
-	lastID    uint64 //
-	machineID uint16 // 16 bits, max 0xFFFF
-	sequence  uint16 // 8 bits, max 0xFF
+	sequence       int64  // last sequence
+	lastTimestamp  int64  // last timestamp
+	lastID         int64  // last generated id
+	epoch          int64  //
+	genCount       uint64 // uuid generated count
+	sequenceShift  uint16 // bits of sequence no. take
+	timestampShift uint16 // bits to shift timestamp
+	machineID      uint16 // id of this machine(process)
 }
 
-var std SnowFlake
-
-func Default() *SnowFlake {
-	return &std
-}
-
-func New(machineId uint16) *SnowFlake {
-	var obj SnowFlake
-	if err := obj.Init(machineId); err != nil {
-		panic(err)
+// sequence + machineID should less than 23 bits
+func NewSnowFlake(sequenceBits, machineIDBits, machineId uint16, relative bool) *SnowFlake {
+	if sequenceBits == 0 {
+		sequenceBits = DefaultSequenceBits
 	}
-	return &obj
-}
-
-func Next() uint64 {
-	return std.Next()
-}
-
-func currentTime() uint64 {
-	return uint64(time.Now().UTC().UnixNano()-twepoch) / snowflakeTimeUnit
-}
-
-func (sf *SnowFlake) Init(machineID uint16) error {
-	if machineID > 0xFFFF {
-		return ErrMachineIDOutOfRange
+	if machineIDBits == 0 {
+		machineIDBits = DefaultMachineIDBits
 	}
-	log.Printf("snowflake init with machine 0x%x\n", machineID)
-	sf.machineID = machineID
-	sf.lastTime = currentTime()
-	return nil
+	if int(sequenceBits+machineIDBits) > MachineSeqBitsLimit {
+		log.Panicf("snowflake: <%d %d> bits too long", machineIDBits, sequenceBits)
+	}
+
+	var sf = &SnowFlake{
+		sequenceShift:  sequenceBits,
+		timestampShift: sequenceBits + machineIDBits,
+		machineID:      machineId % ((1 << machineIDBits) - 1),
+	}
+	if relative {
+		sf.epoch = currentTimeUnit()
+	}
+	sf.lastTimestamp = sf.getTimeUnit()
+	return sf
 }
 
-func (sf *SnowFlake) Next() uint64 {
-	var ts = currentTime()
+func (sf *SnowFlake) getTimeUnit() int64 {
+	return currentTimeUnit() - sf.epoch
+}
 
+func (sf *SnowFlake) Next() int64 {
 	sf.Lock()
-	defer sf.Unlock()
-
-	if ts < sf.lastTime {
-		panic(ErrTimeBackwards)
+	var ts = sf.getTimeUnit()
+	if ts < sf.lastTimestamp {
+		sf.Unlock()
+		log.Panicf("SnowFlake: time has gone backwards, %v -> %v, %v", ts, sf.lastTimestamp, sf.genCount)
 	}
-	if ts == sf.lastTime {
-		sf.sequence += 1
-		if sf.sequence >= 0xFF { // sequence expired, tick to next millisecond
-			ts = sf.tilNextTimeUnit(ts)
+	if ts == sf.lastTimestamp {
+		sf.sequence++
+		if sf.sequence >= (1 << sf.sequenceShift) { // sequence expired, tick to next time unit
 			sf.sequence = 0
+			ts = sf.tilNextTimeUnit(ts)
 		}
 	} else {
 		sf.sequence = 0
 	}
-	sf.lastTime = ts
-	var id = (ts << timestampShift) | (uint64(sf.machineID) << machineIDShift) | uint64(sf.sequence)
-	if id <= sf.lastID {
-		panic(ErrIDBackwards)
+	sf.lastTimestamp = ts
+
+	var id = (uint64(ts) << uint64(sf.timestampShift)) | (uint64(sf.machineID) << uint64(sf.sequenceShift)) | uint64(sf.sequence)
+	if int64(id) <= sf.lastID {
+		sf.Unlock()
+		log.Panicf("SnowFlake: ID has gone backwards, %x -> %x, %x, %v", id, sf.lastID, ts, sf.genCount)
 	}
-	sf.lastID = id
-	return id
+
+	sf.lastID = int64(id)
+	sf.genCount++
+	sf.Unlock()
+
+	return int64(id)
 }
 
 // tick to next
-func (sf *SnowFlake) tilNextTimeUnit(ts uint64) uint64 {
+func (sf *SnowFlake) tilNextTimeUnit(ts int64) int64 {
 	for {
 		time.Sleep(time.Millisecond * 5)
-		var now = currentTime()
+		var now = sf.getTimeUnit()
 		if now > ts {
 			return now
 		}

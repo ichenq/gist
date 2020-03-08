@@ -1,11 +1,20 @@
-package types
+// Copyright © 2017 ichenq@outlook.com All Rights Reserved.
+//
+// Any redistribution or reproduction of part or all of the contents in any form
+// is prohibited.
+//
+// You may not, except with our express written permission, distribute or commercially
+// exploit the content. Nor may you transmit it or store it in any other website or
+// other form of electronic retrieval system.
+
+package mathutil
 
 import (
 	"math"
 )
 
 // code below taken from
-// 	https://github.com/google/googletest/blob/master/googletest/include/gtest/internal/gtest-internal.h
+// https://github.com/google/googletest/blob/master/googletest/include/gtest/internal/gtest-internal.h#L232
 
 // How many ULP's (Units in the Last Place) we want to tolerate when
 // comparing two numbers.  The larger the value, the more error we
