@@ -1,0 +1,61 @@
+<html>
+<head>
+<title>App Test</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+<button onclick="runApp()">Run App</button>
+<button onclick="stopApp()">Stop App</button>
+<p>
+<input id="server" value="ws://localhost:8000/polls/ws">Server URL</input>
+</p>
+<p>
+<input id="data" value="data to send"></input>
+</p>
+<script>
+    let timer = null;
+    let ws = null;
+    let counter = 0;
+
+    function stopApp() {
+        if (timer) {
+            clearInterval(timer);
+            timer = null;
+        }
+        if (ws) {
+            ws.close();
+            ws = null;
+        }
+    }
+
+    function runApp() {
+        counter = 0;
+        timer = null;
+        let url = $('#server').val();
+        ws = new WebSocket(url)
+        let data = 'hello,kitty';
+        ws.onopen = function(event) {
+            console.log('ws connected', event);
+            ws.send(data)
+
+            timer = setInterval(function() {
+                ws.send(data)
+            }, 3500)
+        }
+
+        ws.onmessage = function(event) {
+            console.log(event);
+            counter += 1;
+        }
+
+        ws.onclose = function(event) {
+            console.log(event);   
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+        }
+}
+</script>
+</body>
+</html>
