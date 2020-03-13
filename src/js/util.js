@@ -1,3 +1,4 @@
+'use strict';
 
 function getNowTime() {
     let date = new Date();
