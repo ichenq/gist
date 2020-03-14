@@ -16,21 +16,20 @@ public class Parentheses {
             boolean ok = true;
             for (int i = 0; i < s.length(); i++) {
                 char ch = s.charAt(i);
-                int idx = leftOps.indexOf(ch); // 如果是开放符号，则压栈
-                if (idx >= 0)
+                if (leftOps.contains(s)) // 如果是开放符号，则压栈
                 {
                     stack.push((int)ch);
                     continue;
                 }
-                idx = rightOps.indexOf(ch); // 如果是封闭符号
+                int idx = rightOps.indexOf(ch); // 如果是封闭符号
                 if (idx >= 0) {
                     if (stack.isEmpty()) { //栈为空则符号不匹配
                         ok = false;
                         break;
                     } else {
-                        int last = stack.pop();
+                        int last = stack.pop(); // 判断弹出的符号是不是对应的开放符号
                         int open = leftOps.charAt(idx);
-                        if (last != open) { // 弹出的符号不是对应的开放符号
+                        if (last != open) {
                             ok = false;
                             break;
                         }

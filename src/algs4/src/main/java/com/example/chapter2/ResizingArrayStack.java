@@ -24,6 +24,10 @@ public class ResizingArrayStack<E> implements Iterable<E> {
         this.a[this.N++] = e;
     }
 
+    public E peek() {
+        return this.a[this.N - 1];
+    }
+
     public E pop() {
         this.N--;
         E e = this.a[this.N];
