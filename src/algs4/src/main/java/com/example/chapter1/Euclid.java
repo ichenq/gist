@@ -1,7 +1,10 @@
 package com.example.chapter1;
 
-class Chapter11 {
-    public static int Euclid(int p, int q)
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
+class Euclid {
+    public static int euclid(int p, int q)
     {
         while(q > 0) {
             System.out.printf("p = %d, q = %d\n", p, q);
