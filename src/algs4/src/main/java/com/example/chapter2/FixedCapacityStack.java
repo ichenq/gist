@@ -5,7 +5,7 @@ import edu.princeton.cs.algs4.StdOut;
 
 import java.util.Objects;
 
-class FixedCapacityStack<E>
+public class FixedCapacityStack<E>
 {
     private E[] array;
     private int n = 0;

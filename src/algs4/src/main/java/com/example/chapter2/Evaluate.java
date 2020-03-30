@@ -4,7 +4,7 @@ import java.util.Stack;
 import edu.princeton.cs.algs4.*;
 
 
-class Evaluate
+public class Evaluate
 {
     public static void main(String[] args)
     {
