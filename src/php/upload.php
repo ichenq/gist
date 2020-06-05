@@ -5,7 +5,7 @@ require_once './vendor/aliyun-oss/autoload.php'; // https://github.com/aliyun/al
 use OSS\OssClient;
 use OSS\Core\OssException;
 
-define('MAX_FILE_SIZE', 4*1024*1024);	// 不超过4M
+define('MAX_FILE_SIZE', 4*1024*1024);   // 不超过4M
 
 
 //外部访问的URL前缀
@@ -20,10 +20,10 @@ $IsUploadOss = false;
 
 // OSS配置项
 $AliOssCfg = [
-	'accessKeyId'=> (''),
-	'accessKeySecret'=> (''),
-	'endpoint'=> 'http://oss-cn-shenzhen.aliyuncs.com',
-	'bucket'=> 'images'
+    'accessKeyId'=> (''),
+    'accessKeySecret'=> (''),
+    'endpoint'=> 'http://oss-cn-shenzhen.aliyuncs.com',
+    'bucket'=> 'images'
 ];
 
 //上传到OSS
@@ -76,36 +76,36 @@ function makeFileName($rootdir, $file) {
 
 function checkUploadFile($input_name) {
     $resp = ['code'=>0, 'msg'=>'', 'data'=>[]];
-	if(!isset($_FILES[$input_name])) {
-		$resp['code'] = 1;
-		$resp['msg'] = '参数错误';
-		return $resp;
-	}
+    if(!isset($_FILES[$input_name])) {
+        $resp['code'] = 1;
+        $resp['msg'] = '参数错误';
+        return $resp;
+    }
     $file = $_FILES[$input_name];
-	if($file['error'])
-	{
-		$resp['code'] = 2;
-		$resp['msg'] = $file['error']; 
-		return $resp;
-	}	
-	// 判断上传文件类型
-	$extensions = ['png', 'jpg', 'bmp', 'ico'];
-	$file_ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-	if (!in_array(strtolower($file_ext), $extensions)) {
-		$resp['code'] = 3;
-		$resp['msg'] = '文件类型不匹配';
-		$resp['what'] = $file_ext;
-		unlink($file['tmp_name']);
-		return $resp;
-	}	
-	if ($file['size'] > MAX_FILE_SIZE) {
-		$resp['code'] = 4;
-		$resp['msg'] = '文件大小限制';
-		$resp['what'] = $file['size'];
-		unlink($file['tmp_name']);
-		return $resp;
-	}
-	return $resp;
+    if($file['error'])
+    {
+        $resp['code'] = 2;
+        $resp['msg'] = $file['error']; 
+        return $resp;
+    }   
+    // 判断上传文件类型
+    $extensions = ['png', 'jpg', 'bmp', 'ico'];
+    $file_ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+    if (!in_array(strtolower($file_ext), $extensions)) {
+        $resp['code'] = 3;
+        $resp['msg'] = '文件类型不匹配';
+        $resp['what'] = $file_ext;
+        unlink($file['tmp_name']);
+        return $resp;
+    }   
+    if ($file['size'] > MAX_FILE_SIZE) {
+        $resp['code'] = 4;
+        $resp['msg'] = '文件大小限制';
+        $resp['what'] = $file['size'];
+        unlink($file['tmp_name']);
+        return $resp;
+    }
+    return $resp;
 }
 
 
