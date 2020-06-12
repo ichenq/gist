@@ -3,6 +3,20 @@
 #include <utility>
 #include <vector>
 
+
+
+inline double doubleFromBits(int64_t n)
+{
+    double f = 0;
+    memcpy(&f, &n, sizeof(n));
+    return f;
+}
+
+const double NaN = doubleFromBits(0x7FF8000000000001);
+const double Inf = doubleFromBits(0x7FF0000000000000);
+const double NegInf = doubleFromBits(0xFFF0000000000000);
+
+
 inline bool is_space(int ch)
 {
     return ch == ' ' || ch == '\t' || ch == '\n';
@@ -44,20 +58,38 @@ int my_atoi(const char* s)
     return sign ? -n : n;
 }
 
-double my_atof(const char* s)
+double my_atof(const char* s, int len)
 {
     int sign = 0;
     double v = 0;
+    const char* end = s + len;
     char c;
 
+    if (len <= 0)
+        return 0;
+
     // skip leading space
-    while (is_space(c = *s))
+    while (s != end && is_space(c = *s))
         s++;
 
+    if (len == 3)
+    {
+        if (_strcmpi(s, "NaN") == 0)
+            return NaN;
+    }
+    
     // sign flag
     sign = (c == '-');
     if (sign || c == '+')
         s++;
+
+    if (len >= 3) 
+    {
+        if (_strcmpi(s, "inf") == 0)
+        {
+            return sign ? NegInf : Inf;
+        }
+    }
     
     while (is_digit(*s))
     {
@@ -108,6 +140,9 @@ inline bool is_float_equal(double x, double y)
 void test_atof()
 {
     std::vector<std::pair<const char*, double>> test_cases = {
+        {"NaN", NaN},
+        {"inf", Inf},
+        {"-inf", NegInf},
         {"  314.159", 314.159},
         {"314.159 ", 314.159},
         {" +314.159 ", 314.159},
@@ -122,8 +157,11 @@ void test_atof()
     {
         const char* s = test_cases[i].first;
         double expect = test_cases[i].second;
-        double d = my_atof(s);  
-        bool f = is_float_equal(expect, d);
-        assert(f);
+        double d = my_atof(s, strlen(s));  
+        if (isfinite(expect)) 
+        {
+            bool f = is_float_equal(expect, d);
+            assert(f);
+        }
     }
 }

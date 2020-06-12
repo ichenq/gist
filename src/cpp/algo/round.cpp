@@ -103,7 +103,7 @@ inline double doubleFromBits(uint64_t x)
     return f;
 }
 
-void unit_test()
+void test_round()
 {
     const double nan = doubleFromBits(0x7FF8000000000001);
     const double inf = doubleFromBits(0x7FF0000000000000);

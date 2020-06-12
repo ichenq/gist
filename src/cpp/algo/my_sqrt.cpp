@@ -27,16 +27,16 @@ double my_sqrt1(double x)
 }
 
 // 求出根号a的近似值, 首先随便猜一个近似值x，然后不断令x等于x和a/x的平均数
-double my_sqrt2(double x)
+double my_sqrt2(double a)
 {
-    if (x <= 0)
+    if (a <= 0)
         return -1.0;
-    double newg = x / 2;
-    double lastg = 0;
-    while (newg != lastg)
+    double x = a / 2;
+    double last = 0;
+    while (x != last)
     {
-        lastg = newg;
-        newg = (lastg + x / lastg) / 2;
+        last = x;
+        x = (last + a / x) / 2;
     }
     return newg;
 }
