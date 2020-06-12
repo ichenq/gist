@@ -29,7 +29,7 @@ func main() {
 	case 4:
 		f := math.Float32frombits(uint32(nval))
 		fmt.Printf("0x08%x => %f\n", nval, f)
-		showFloat(float32(fvalue))
+		showFloat(f)
 	}
 }
 
