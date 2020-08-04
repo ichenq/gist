@@ -113,12 +113,49 @@ ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
     return dummy.next;
 }
 
+// Linked List Cycle
+// https://leetcode.com/problems/linked-list-cycle/
+bool hasCycle(struct ListNode* head) {
+    struct ListNode* slow = head;
+    struct ListNode* fast = head;
+    while (fast != NULL && fast->next != NULL) {
+        fast = fast->next->next;
+        slow = slow->next;
+        if (fast == slow) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Remove Nth Node From End of List
+// https://leetcode.com/problems/remove-nth-node-from-end-of-list/description/
+ListNode* removeNthFromEnd(struct ListNode* head, int n)
+{
+    ListNode dummy;
+    dummy.next = head;
+    ListNode* second = &dummy;
+    for (int i = 0; i <= n; i++) // move N+1 step
+    {
+        second = second->next;
+    }
+    ListNode* first = &dummy;
+    while (second != NULL)
+    {
+        first = first->next;
+        second = second->next;
+    }
+    first->next = first->next->next;
+    return dummy.next;
+}
+
+
 void test_list()
 {
     int arr1[] = { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 };
-    int arr3[] = {2, 4, 3};
-    int arr2[] = {5, 6, 4};
-    int arr4[] = {1, 2, 3, 4, 5, 6, 7};
+    int arr3[] = { 2, 4, 3 };
+    int arr2[] = { 5, 6, 4 };
+    int arr4[] = { 1, 2, 3, 4, 5, 6, 7 };
     int arr5[] = { 1 };
     int arr6[] = { 1, 3, 5, 7, 9 };
     int arr7[] = { 2, 4, 6, 8, 10 };
