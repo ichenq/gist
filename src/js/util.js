@@ -11,3 +11,20 @@ function getNowTime() {
     let milsec = date.getMilliseconds();
     return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second + "." + milsec;
 }
+
+function format_integer(number, base) {
+    let arr = [];
+    while (number > 0) {
+        arr.push(number % base);
+        number = Math.floor(number / base);
+    }
+    arr.reverse();
+    return arr.join('');
+}
+
+function unit_test() {
+    console.log(format_integer(50, 2));
+    console.log(format_integer(50, 8));
+}
+
+unit_test();
