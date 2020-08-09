@@ -5,52 +5,6 @@
 
 using namespace std;
 
-static ListNode* arrayToList(int array[], int size)
-{
-    if (size == 0)
-        return NULL;
-    ListNode* head = NULL;
-    ListNode* prev = NULL;
-    for (int i = 0; i < size; i++)
-    {
-        ListNode* node = new ListNode(array[i]);
-        if (head == NULL)
-        {
-            head = node;
-            prev = node;
-        }
-        else
-        {
-            prev->next = node;
-            prev = node;
-        }
-    }
-    return head;
-}
-
-static void delete_list(ListNode* node)
-{
-    while (node != NULL)
-    {
-        ListNode* next = node->next;
-        delete node;
-        node = next;
-    }
-}
-
-static void print_list(ListNode* node)
-{
-    while (node != nullptr)
-    {
-        ListNode* next = node->next;
-        cout << node->val;
-        if (next != nullptr)
-            cout << " -> ";
-        node = next;
-    }
-    cout << endl;
-}
-
 
 // convert binary(in list node) to integer
 // https://leetcode.com/problems/convert-binary-number-in-a-linked-list-to-integer/
@@ -150,6 +104,68 @@ ListNode* removeNthFromEnd(struct ListNode* head, int n)
 }
 
 
+// Add two non-negative integers represented by linked list in reverse order
+// https://leetcode.com/problems/add-two-numbers/
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+
+    int count1 = list_size(l1);
+    int count2 = list_size(l2);
+
+    ListNode* head = count1 > count2 ? l1 : l2;
+    ListNode* other = head == l1 ? l2 : l1;
+    ListNode* node = head;
+    ListNode* prev = NULL;
+
+    int carry = 0;
+    while (node != NULL)
+    {
+        if (other != NULL)
+        {
+            node->val += other->val;
+            other = other->next;
+        }
+        if (carry) {
+            carry = 0;
+            node->val++;
+        }
+        if (node->val >= 10) {
+            carry = 1;
+            node->val %= 10;
+        }
+        prev = node;
+        node = node->next;
+    }
+    if (carry)
+    {
+        prev->next = new ListNode(1);
+    }
+    return head;
+}
+
+// remove duplicated from sorted list
+// https://leetcode.com/problems/remove-duplicates-from-sorted-list/
+struct ListNode* deleteDuplicates(struct ListNode* head)
+{
+    if (head == NULL || head->next == NULL)
+        return head;
+    struct ListNode* prev = head;
+    struct ListNode* node = head->next;
+    while (node != NULL)
+    {
+        if (node->val == prev->val)
+        {
+            prev->next = node->next;
+            node = node->next;
+        }
+        else
+        {
+            prev = node;
+            node = node->next;
+        }
+    }
+    return head;
+}
+
 void test_list()
 {
     int arr1[] = { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 };
@@ -179,8 +195,7 @@ void test_list()
     }
     {
         ListNode* list1 = arrayToList(arr5, _countof(arr5));
-        // ListNode* list = removeNthFromEnd(list1, 7);
-        ListNode* list = removeNthFromEnd2(list1, 1);
+        ListNode* list = removeNthFromEnd(list1, 1);
         print_list(list);
         delete_list(list1);
     }
