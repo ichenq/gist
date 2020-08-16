@@ -1,9 +1,13 @@
-
+#include "stack.h"
 #include <assert.h>
 #include <stdint.h>
+#include <cctype>
 #include <stack>
 #include <string>
+#include <vector>
 #include <algorithm>
+#include <unordered_map>
+
 
 using namespace std;
 
@@ -152,7 +156,7 @@ bool backspaceCompare(const string& S, const string& T) {
 }
 
 // https://leetcode.com/problems/valid-parentheses/
-bool isValid(string s) 
+bool isValid(string s)
 {
     if (s.empty())
         return true;
@@ -177,26 +181,7 @@ bool isValid(string s)
     return stk.empty();
 }
 
-inline bool is_space(int ch) {
-    return ch == ' ' || ch == '\t' || ch == '\n';
-}
 
-static int64_t my_atoi(const string& s, int& j) {
-    int64_t n = 0;
-    while (j < s.size() && is_space(s[j])) { // skip leading space
-        j++;
-    }
-    // negative sign
-    int sign = (s[j] == '-');
-    if (sign || s[j] == '+')
-        j++;
-
-    while (j < s.size() && (s[j] >= '0' && s[j] <= '9')) {
-        n = n * 10 + s[j] - '0';
-        j++;
-    }
-    return sign ? -n : n;
-}
 
 static void compute(std::stack<char>& ops, std::stack<int64_t>& vals)
 {
@@ -213,59 +198,122 @@ static void compute(std::stack<char>& ops, std::stack<int64_t>& vals)
     vals.push(n1);
 }
 
-static bool is_operator(int ch)
-{
-    return ch == '+' || ch == '-';
-}
-
 // https://leetcode.com/problems/basic-calculator/
 int calculate(const string& s) {
-    std::stack<char> ops;
-    std::stack<int64_t> vals;
-    int i = 0;
-    while (i < s.size())
-    {
+    if (s.empty())
+        return 0;
+    int64_t result = 0;
+    int64_t sign = 1;
+    int64_t num = 0;
+    std::stack<int64_t> stk;
+    stk.push(sign);
+    for (int i = 0; i < s.length(); i++) {
         char ch = s[i];
-        if (is_space(ch)) {
-            i++;
-            continue;
+        //if (ch == ' ') {
+        //    continue;
+        //}
+        if (ch >= '0' && ch <= '9') {
+            num = num * 10 + (ch - '0');
+        }
+        else if (ch == '+' || ch == '-') {
+            result += sign * num;
+            sign = (ch == '+' ? 1 : -1);
+            num = 0;
         }
         else if (ch == '(') {
-            i++;
-            continue;
-        }
-        else if (is_operator(ch)) {
-            if (i == 0 || (i > 0 && is_operator(s[i-1]))) {
-                int64_t n = my_atoi(s, i);
-                vals.push(n);
-                continue;
-            }
-            if (!ops.empty()) {
-                compute(ops, vals);
-            }
-            ops.push(ch);
-            i++;
-            continue;
+            stk.push(result);
+            stk.push(sign);
+            sign = 1;
+            result = 0;
         }
         else if (ch == ')') {
-            if (!ops.empty()) {
-                compute(ops, vals);
-            }
-            i++;
-            continue;
-        } 
-        else {
-            int64_t n = my_atoi(s, i);
-            vals.push(n);
+            result += sign * num;
+            result *= stk.top();
+            stk.pop();
+            result += stk.top();
+            stk.pop();
+            num = 0;
         }
     }
-    if (!ops.empty()) {
-        compute(ops, vals);
-    }
-    assert(!vals.empty());
-    int64_t n = vals.top();
-    return (int)n;
+    result += sign * num;
+    return (int)result;
 }
+
+// https://leetcode.com/problems/baseball-game/
+int calPoints(const vector<string>& ops) {
+    std::stack<int> stack;
+    int sum = 0;
+    for (int i = 0; i < ops.size(); i++)
+    {
+        const string& v = ops[i];
+        switch (v[0])
+        {
+        case '+': // sum of the last two round's points
+        {
+            int last = stack.top();
+            stack.pop();
+            int n = last + stack.top();
+            stack.push(last);
+            stack.push(n);
+            sum += n;
+        }
+        break;
+
+        case 'D': // doubled data of the last round's points
+        {
+            int last = stack.top();
+            int n = last + last;
+            stack.push(n);
+            sum += n;
+        }
+        break;
+
+        case 'C': // invalidate last round
+            sum -= stack.top();
+            stack.pop();
+            break;
+
+        default:
+        {
+            int n = atoi(v.c_str());
+            stack.push(n);
+            sum += n;
+        }
+        }
+    }
+    
+    return sum;
+}
+
+
+// https://leetcode.com/problems/next-greater-element-i/
+vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+    stack<int> stk;
+    unordered_map<int, int> dict;
+    for (auto n : nums2)
+    {
+        while (!stk.empty() && n > stk.top()) {
+            dict[stk.top()] = n;
+            stk.pop();
+        }
+        stk.push(n);
+    }
+
+    vector<int> result;
+    result.reserve(nums1.size());
+    for (auto n : nums1) {
+        auto iter = dict.find(n);
+        if (iter != dict.end()) {
+            result.push_back(iter->second);
+        }
+        else {
+            result.push_back(-1);
+        }
+    }
+   
+    return std::move(result);
+}
+
 
 void test_stack()
 {
@@ -280,10 +328,10 @@ void test_stack()
         minStack.push(-1024);
         minStack.push(-1024);
         minStack.pop();
-        int v = minStack.getMin(); 
+        int v = minStack.getMin();
         assert(v == -1024);
-        minStack.pop(); 
-        v = minStack.getMin(); 
+        minStack.pop();
+        v = minStack.getMin();
         assert(v == 512);
     }
 
@@ -295,6 +343,20 @@ void test_stack()
         assert(n == 1);
 
         n = calculate("2-(5-6)");
-        assert(n == -19);
+        assert(n == 3);
+    }
+
+    {
+        vector<string> args{ "5","2","C","D","+" };
+        int sum = calPoints(args);
+        assert(sum == 30);
+    }
+
+    {
+        vector<int> nums1{ 4,1,2 };
+        vector<int> nums2{ 1,3,4,2 };
+        auto result = nextGreaterElement(nums1, nums2);
+        vector<int> expected{ -1, 3, -1 };
+        assert(result == expected);
     }
 }
