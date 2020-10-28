@@ -1,9 +1,14 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <assert.h>
+#include <math.h>       //isfinite
 #include <utility>
 #include <vector>
 
-
+#ifdef _WIN32
+#define strcasecmp _strcmpi 
+#endif
 
 inline double doubleFromBits(int64_t n)
 {
@@ -40,13 +45,13 @@ inline int tenpow(int n)
 int my_atoi(const char* s)
 {
     int n = 0;
-    int sign = (*s == '-');
 
     // skip leading space
     while (is_space(*s))
         s++;
 
     // negative sign
+    int sign = (*s == '-');
     if (sign || *s == '+')
         s++;
 
@@ -74,7 +79,7 @@ double my_atof(const char* s, int len)
 
     if (len == 3)
     {
-        if (_strcmpi(s, "NaN") == 0)
+        if (strcasecmp(s, "nan") == 0)
             return NaN;
     }
     
@@ -85,7 +90,7 @@ double my_atof(const char* s, int len)
 
     if (len >= 3) 
     {
-        if (_strcmpi(s, "inf") == 0)
+        if (strcasecmp(s, "inf") == 0)
         {
             return sign ? NegInf : Inf;
         }
@@ -137,7 +142,7 @@ inline bool is_float_equal(double x, double y)
     return f <= 0.000001;
 }
 
-void test_atof()
+int main()
 {
     std::vector<std::pair<const char*, double>> test_cases = {
         {"NaN", NaN},
@@ -163,5 +168,7 @@ void test_atof()
             bool f = is_float_equal(expect, d);
             assert(f);
         }
+        printf("%s --> %f\n", s, d);
     }
+    printf("OK\n");
 }

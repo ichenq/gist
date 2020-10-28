@@ -12,7 +12,7 @@ double my_sqrt1(double x)
     }
     double low = 0;
     double high = x;
-    double mid = (low + high) / 2;
+    double mid = low + (high - low) / 2;
     while ((high - mid) > FLT_EPSILON)
     {
         if (mid * mid > x) {
@@ -38,17 +38,17 @@ double my_sqrt2(double a)
         last = x;
         x = (last + a / x) / 2;
     }
-    return newg;
+    return x;
 }
 
-void test_sqrt()
+int main()
 {
     double arr[] = { 2, 3, 4, 5, 9 };
-    for (int i = 0; i < _countof(arr); i++)
+    for (int i = 0; i < sizeof(arr)/sizeof(arr[0]); i++)
     {
         double f1 = my_sqrt1(arr[i]);
         double f2 = my_sqrt2(arr[i]);
         double f3 = sqrt(arr[i]);
-        printf("%f, %f, %f\n", f1, f2, f3);
+        printf("sqrt(%d), method1: %f,  method2: %f, std: %f\n", int(arr[i]), f1, f2, f3);
     }
 }
