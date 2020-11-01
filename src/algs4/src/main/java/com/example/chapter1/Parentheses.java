@@ -4,6 +4,7 @@ import java.util.*;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
+// Exercise 1.3.4
 public class Parentheses {
     public static String leftOps = new String("[({");
     public static String rightOps = new String("])}");

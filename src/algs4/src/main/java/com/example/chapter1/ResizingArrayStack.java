@@ -2,7 +2,8 @@ package com.example.chapter1;
 
 import java.util.Iterator;
 
-public class ResizingArrayStack<E> implements Iterable<E> {
+public class ResizingArrayStack<E> implements Iterable<E>
+{
     private E[] a = (E[])new Object[1];
     private int N = 0;
 
@@ -24,6 +25,7 @@ public class ResizingArrayStack<E> implements Iterable<E> {
         this.a[this.N++] = e;
     }
 
+    // Exercise 1.3.7
     public E peek() {
         return this.a[this.N - 1];
     }
