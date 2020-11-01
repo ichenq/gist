@@ -4,7 +4,7 @@ import java.util.*;
 
 
 public class ReversePolish {
-    public static String operators = new String("+-*/^");
+    public static String operators = ("+-*/^");
     public static Map<String, Integer> precedence = new HashMap<>();
     static {
         precedence.put("+", 1);
