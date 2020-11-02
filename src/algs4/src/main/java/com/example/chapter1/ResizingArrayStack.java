@@ -4,8 +4,13 @@ import java.util.Iterator;
 
 public class ResizingArrayStack<E> implements Iterable<E>
 {
-    private E[] a = (E[])new Object[1];
+    private E[] a;
     private int N = 0;
+
+    public ResizingArrayStack()
+    {
+        resize(1);
+    }
 
     public boolean isEmpty() { return N == 0; }
     public int size() { return N; }

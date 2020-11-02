@@ -26,6 +26,7 @@ class Euclid {
     public static void main(String[] args) {
         int r = euclid(111111, 1234567);
         System.out.println("euclid: " + r);
+
         int a = mystery(3, 11);
         System.out.println("mystery: " + a);
     }
