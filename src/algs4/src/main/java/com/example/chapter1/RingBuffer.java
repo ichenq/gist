@@ -1,4 +1,4 @@
-package com.example.chapter2;
+package com.example.chapter1;
 
 public class RingBuffer<E> {
     private E[] buffer = null;

@@ -1,10 +1,10 @@
-package com.example.chapter2;
+package com.example.chapter1;
 
 import java.util.*;
 
 
 public class ReversePolish {
-    public static String operators = new String("+-*/^");
+    public static String operators = ("+-*/^");
     public static Map<String, Integer> precedence = new HashMap<>();
     static {
         precedence.put("+", 1);
@@ -27,6 +27,7 @@ public class ReversePolish {
         return "";
     }
 
+    // Exercise 1.3.11
     // 计算后缀表达式
     // 6 5 2 3 + 8 * + 3 + *  ==>
     private static double evaluatePostfix(String expression) {
@@ -46,6 +47,7 @@ public class ReversePolish {
         return Double.parseDouble(stack.pop());
     }
 
+    // Exercise 1.3.10
     private static String infixToPostfix(String expression) {
         StringBuilder sb = new StringBuilder();
         ResizingArrayStack<String> stack = new ResizingArrayStack<>();
