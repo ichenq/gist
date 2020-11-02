@@ -48,6 +48,7 @@ public class ReversePolish {
     }
 
     // Exercise 1.3.10
+    // 中缀表达式 -> 后缀表达式
     private static String infixToPostfix(String expression) {
         StringBuilder sb = new StringBuilder();
         ResizingArrayStack<String> stack = new ResizingArrayStack<>();
@@ -97,6 +98,7 @@ public class ReversePolish {
         return sb.toString().trim();
     }
 
+    // 后缀表达式 -> 中缀表达式
     private static String postfixToInfix(String expression)
     {
         ResizingArrayStack<String> stack = new ResizingArrayStack<>();
@@ -136,13 +138,12 @@ public class ReversePolish {
             if (!output1.equals(expected)) {
                 System.out.println(String.format("not equal, %s, %s", output1, expected));
             }
-            System.out.println(input + " equals " + output2);
+            System.out.println(String.format("[%s] equals [%s]", input, output2));
         }
-
 
         String expression = "6 * ( 5 + ( 2 + 3 ) * 8 ) + 3";
         String postfixExpr = infixToPostfix(expression);
         double result = evaluatePostfix(postfixExpr);
-        System.out.println(expression + " equals " + result);
+        System.out.println(String.format("[%s] equals [%s]", expression, result));
     }
 }

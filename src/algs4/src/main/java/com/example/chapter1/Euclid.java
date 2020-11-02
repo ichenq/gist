@@ -1,6 +1,9 @@
 package com.example.chapter1;
 
+
 class Euclid {
+
+    // Exercise 1.1.24
     public static int euclid(int p, int q)
     {
         while(q > 0) {
@@ -12,6 +15,7 @@ class Euclid {
         return p;
     }
 
+    // Exercise 1.1.18
     public static int mystery(int a, int b)
     {
         if (b == 0) return 0;
@@ -20,7 +24,9 @@ class Euclid {
     }
 
     public static void main(String[] args) {
+        int r = euclid(111111, 1234567);
+        System.out.println("euclid: " + r);
         int a = mystery(3, 11);
-        System.out.println(a);
+        System.out.println("mystery: " + a);
     }
 }

@@ -15,6 +15,6 @@ class GeneralizedQueue<E> {
     }
 
     E delete(int k) {
-
+        return null;
     }
 }
