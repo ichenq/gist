@@ -1,30 +1,45 @@
 package com.example.chapter1;
 
 import java.util.*;
+import java.math.*;
 
 public class TwoSum
 {
-    // 暴力循环，时间复杂度O(N^2)，空间复杂度O(1)
-    public static Map<Integer, Integer> sum(int[] a, int target)
+    static class Item implements Comparable<Item>
     {
-        Map<Integer, Integer> index = new TreeMap<>();
-        int count = 0;
+        int first = 0;
+        int second = 0;
+
+        public Item(int a, int b) {
+            first = Math.min(a, b);
+            second = Math.max(a, b);
+        }
+
+        @Override
+        public int compareTo(Item other) {
+            int v = Integer.compare(first, other.first);
+            if (v == 0) {
+                return Integer.compare(second, other.second);
+            }
+            return v;
+        }
+    }
+
+    // 暴力循环，时间复杂度O(N^2)，空间复杂度O(1)
+    public static void sum(int[] a, int target, Set<Item> set)
+    {
         for (int i = 0; i < a.length; i++) {
             for (int j = i + 1; j < a.length; j++) {
                 if (a[i] + a[j] == target) {
-                    if (!index.containsKey(a[j])) {
-                        index.put(a[i], a[j]);
-                    }
+                    set.add(new Item(a[i], a[j]));
                 }
             }
         }
-        return index;
     }
 
     // 使用hashmap, 时间和空间复杂度都为O(N)
-    public static Map<Integer, Integer> sum2(int[] a, int target)
+    public static void sum2(int[] a, int target, Set<Item> set)
     {
-        Map<Integer, Integer> index = new TreeMap<>();
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < a.length; i++) {
             map.put(a[i], i);
@@ -33,36 +48,27 @@ public class TwoSum
             int v = target - a[i];
             Integer j = map.get(v);
             if (j != null && j != i) {
-                if (!index.containsKey(a[j])) {
-                    index.put(a[i], a[j]);
-                }
+                set.add(new Item(a[i], a[j]));
             }
         }
-        return index;
     }
 
     //
-    public static Map<Integer, Integer> sum3(int[] a, int target)
+    public static void sum3(int[] a, int target, Set<Item> set)
     {
-        Map<Integer, Integer> index = new TreeMap<>();
         Arrays.sort(a); // quicksort N*ln(N)
         for (int i = 0; i < a.length; i++) {
             int v = target - a[i];
             int idx = BinarySearch.search(v, a);
             if (idx >= 0 && idx > i) {
-                if (!index.containsKey(a[idx])) {
-                    index.put(a[i], a[idx]);
-                }
+                set.add(new Item(a[i], a[idx]));
             }
         }
-        return index;
     }
 
-    public static void printMap(Map<Integer, Integer> v) {
-        for (Map.Entry<Integer, Integer> entry : v.entrySet()) {
-            int idx1 = entry.getKey();
-            int idx2 = entry.getValue();
-            System.out.println(String.format("%d --> %d", idx1, idx2));
+    public static void printSet(Set<Item> v) {
+        for (Item item : v) {
+            System.out.println(String.format("%d --> %d", item.first, item.second));
         }
     }
 
@@ -82,17 +88,20 @@ public class TwoSum
         };
 
         int target = 100;
-        Map<Integer, Integer> v1 = TwoSum.sum(arr, target);
-        Map<Integer, Integer> v2 = TwoSum.sum2(arr, target);
-        Map<Integer, Integer> v3 = TwoSum.sum3(arr, target);
+        Set<Item> set1 = new TreeSet<>();
+        Set<Item> set2 = new TreeSet<>();
+        Set<Item> set3 = new TreeSet<>();
+        TwoSum.sum(arr, target, set1);
+        TwoSum.sum2(arr, target, set2);
+        TwoSum.sum3(arr, target, set3);
         System.out.println("calcute twosum of " + target);
-        System.out.println("method1 index: #" + v1.size());
-        printMap(v1);
-        System.out.println("method2 index: #" + v2.size());
-        printMap(v2);
-        System.out.println("method3 index: #" + v3.size());
-        printMap(v3);
-        assert(v1.equals(v2));
-        assert(v2.equals(v3));
+        System.out.println("method1 index: #" + set1.size());
+        printSet(set1);
+        System.out.println("method2 index: #" + set2.size());
+        printSet(set2);
+        System.out.println("method3 index: #" + set3.size());
+        printSet(set3);
+        assert(set1.equals(set2));
+        assert(set2.equals(set3));
     }
 }
