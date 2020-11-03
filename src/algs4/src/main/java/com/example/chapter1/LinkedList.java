@@ -5,7 +5,7 @@ import java.util.List;
 public class LinkedList
 {
     // 双链表
-    class ListNode
+    static class ListNode
     {
         ListNode next;
         ListNode prev;
@@ -13,7 +13,7 @@ public class LinkedList
     }
 
     // 单链表
-    class LinkedNode
+    static class LinkedNode
     {
         LinkedNode next;
         int value;

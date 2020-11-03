@@ -5,14 +5,14 @@ import java.util.Iterator;
 class Queue<E> implements Iterable<E>
 {
     // 双链表
-    private class Node
+    static class Node<E>
     {
-        Node next;
+        Node<E> next;
         E item;
     }
 
-    private Node first;
-    private Node last;
+    private Node<E> first;
+    private Node<E> last;
     private int N;
 
     public boolean isEmpty() {
@@ -25,7 +25,7 @@ class Queue<E> implements Iterable<E>
 
     public void enqueue(E item)
     {
-        Node node = new Node();
+        Node<E> node = new Node<>();
         node.item = item;
         node.next = null;
         if (first == null) {
@@ -53,7 +53,7 @@ class Queue<E> implements Iterable<E>
     }
 
     private class QueueIterator implements Iterator<E> {
-        private Node node = first;
+        private Node<E> node = first;
         public boolean hasNext() { return node != null; }
         public E next() { return node.item; }
         public void remove() { /* do nothing */ }

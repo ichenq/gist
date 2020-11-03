@@ -53,7 +53,7 @@ public class RingBuffer<E> implements Iterable<E>
 
     public static void main(String args[])
     {
-        RingBuffer<Integer> buf = new RingBuffer(5);
+        RingBuffer<Integer> buf = new RingBuffer<>(5);
         for (int i = 0; i < 10; i++)
         {
             buf.put(i);

@@ -3,15 +3,15 @@ package com.example.chapter1;
 // Exercise 1.3.32
 public class Steque<E>
 {
-    class LinkedNode
+    static class LinkedNode<E>
     {
-        LinkedNode next;
-        LinkedNode prev;
+        LinkedNode<E> next;
+        LinkedNode<E> prev;
         E value;
     }
 
-    private LinkedNode first;
-    private LinkedNode last;
+    private LinkedNode<E> first;
+    private LinkedNode<E> last;
     private int n = 0;
 
     public Steque()
@@ -30,7 +30,7 @@ public class Steque<E>
 
     public void push(E e)
     {
-        LinkedNode node = new LinkedNode();
+        LinkedNode<E> node = new LinkedNode<>();
         node.value = e;
         if (first == null) {
             first = node;
@@ -44,13 +44,13 @@ public class Steque<E>
 
     public E pop()
     {
-        LinkedNode node = last;
+        LinkedNode<E> node = last;
         n--;
         if (n == 0) {
             last = null;
             first = null;
         } else {
-            LinkedNode prev = node.prev;
+            LinkedNode<E> prev = node.prev;
             prev.next = null;
             node.prev = null;
             last = prev;
@@ -65,13 +65,13 @@ public class Steque<E>
 
     public E dequeue()
     {
-        LinkedNode node = first;
+        LinkedNode<E> node = first;
         n--;
         if (n == 0) {
             first = null;
             last = null;
         } else {
-            LinkedNode next = first.next;
+            LinkedNode<E> next = first.next;
             node.next = null;
             next.prev = null;
             first = next;
@@ -81,7 +81,7 @@ public class Steque<E>
 
     public static void main(String args[])
     {
-        Steque<Integer> steq = new Steque();
+        Steque<Integer> steq = new Steque<>();
         for (int i = 0; i < 10; i++) {
             steq.push(i);
         }

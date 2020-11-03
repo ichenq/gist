@@ -13,7 +13,7 @@ public class BinarySearch {
         {
             int mid = lo + (hi - lo) / 2;
             if (a[mid] == key) {
-                return key;
+                return mid;
             }
             else if (a[mid] > key) {
                 lo = mid + 1;

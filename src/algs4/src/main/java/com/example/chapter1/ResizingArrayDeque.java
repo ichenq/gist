@@ -82,7 +82,7 @@ public class ResizingArrayDeque<E> implements Iterable<E>
 
     public static void main(String args[])
     {
-        Deque<Integer> deq = new Deque();
+        Deque<Integer> deq = new Deque<>();
         for (int i = 0; i < 10; i++) {
             deq.pushLeft(i);
         }

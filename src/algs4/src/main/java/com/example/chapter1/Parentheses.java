@@ -11,7 +11,7 @@ public class Parentheses {
 
     // test cases: [()]{}{[()()]()}  [(])
     public static void main(String[] args) {
-        ResizingArrayStack<Integer> stack = new ResizingArrayStack();
+        ResizingArrayStack<Integer> stack = new ResizingArrayStack<>();
         while (!StdIn.isEmpty()) {
             String s = StdIn.readString();
             boolean ok = true;
