@@ -45,6 +45,15 @@ public class ResizingArrayStack<E> implements Iterable<E>
         return e;
     }
 
+    // Exercise 1.3.47
+    public void catenate(ResizingArrayStack<E> other)
+    {
+        while (!other.isEmpty()) {
+            E v = other.pop();
+            push(v);
+        }
+    }
+
     public Iterator<E> iterator() {
         return new ReverseArrayIterator();
     }

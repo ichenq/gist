@@ -48,6 +48,15 @@ class Queue<E> implements Iterable<E>
         return item;
     }
 
+    // Exercise 1.3.47
+    public void catenate(Queue<E> other)
+    {
+        while (!other.isEmpty()) {
+            E v = other.dequeue();
+            enqueue(v);
+        }
+    }
+
     public Iterator<E> iterator() {
         return new QueueIterator();
     }

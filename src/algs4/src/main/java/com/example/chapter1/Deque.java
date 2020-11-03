@@ -89,6 +89,15 @@ public class Deque<E> implements Iterable<E>
         return node.value;
     }
 
+    // Exercise 1.3.47
+    public void catenate(Deque<E> other)
+    {
+        while (!other.isEmpty()) {
+            E v = other.popLeft();
+            pushRight(v);
+        }
+    }
+
     public Iterator<E> iterator() {
         return new DequeIterator();
     }
