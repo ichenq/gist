@@ -3,11 +3,10 @@ package com.example.chapter1;
 // 队列实现的栈
 public class QueueBasedStack<E>
 {
-    private Queue<E>  queue;
+    private Queue<E>  queue = new Queue<>();
 
     public QueueBasedStack()
     {
-        queue = new Queue<>();
     }
 
     public int size() {

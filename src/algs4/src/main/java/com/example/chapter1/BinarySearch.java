@@ -16,10 +16,10 @@ public class BinarySearch {
                 return mid;
             }
             else if (a[mid] > key) {
-                lo = mid + 1;
+                hi = mid - 1;
             }
             else if (a[mid] < key) {
-                hi = mid - 1;
+                lo = mid + 1;
             }
         }
         return -1;

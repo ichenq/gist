@@ -25,10 +25,12 @@ public class StackBasedQueue<E>
         }
     }
 
+    // O(1)
     public void enqueue(E e) {
         s1.push(e);
     }
 
+    // 摊还分析O(1)
     public E dequeue() {
         if (s2.isEmpty()) {
             shift();
