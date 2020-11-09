@@ -3,7 +3,7 @@ package com.example.chapter2;
 // shell sort
 public class Shell
 {
-    public static void sortInt(int[] arr)
+    public static void sortInt(Integer[] arr)
     {
         int N = arr.length;
         int gap = 1;
@@ -13,21 +13,27 @@ public class Shell
 
         for (; gap > 0; gap /= 3)
         {
-            System.out.println(String.format("--------gap %d-----------", gap));
+            int compare_count = 0;
+            //System.out.println(String.format("--------gap %d-----------", gap));
             for (int i = gap; i < N; i++)
             {
                 for (int j = i; j >= gap; j -= gap)
                 {
-                    System.out.println(String.format("compare and sort index %d <--> %d", j, j-gap));
+                    //System.out.println(String.format("compare and sort index %d <--> %d", j, j-gap));
+                    compare_count++;
                     if (arr[j] > arr[j-gap]) {
                         int tmp = arr[j];
                         arr[j] = arr[j-gap];
                         arr[j-gap] = tmp;
+                    } else {
+                        break;
                     }
                 }
-                System.out.println("-------------end sort---------------");
+                //System.out.println("-------------end sort---------------");
             }
-            System.out.println(String.format("-------------end gap %d-------------", gap));
+            //System.out.println(String.format("-------------end gap %d-------------", gap));
+            double rate = (double)(compare_count) / (double)(N);
+            System.out.println(String.format("gap: %d, compare %d, rate: %.2f", gap, compare_count, rate));
         }
     }
 
@@ -49,9 +55,9 @@ public class Shell
         }
     }
 
-    public static void main(String[] args)
+    public static void test()
     {
-        final int[] arr = {
+        final Integer[] arr = {
                 1, 25, 19, 37, 12, 74, 35, 21,
                 54, 61, 80, 93, 80, 74, 61, 54,
         };
@@ -71,9 +77,17 @@ public class Shell
         Shell.sort(arr2);
         assert SortUtil.isSorted(arr);
         assert SortUtil.isSorted(arr2);
-//        for (int n : arr)
-//        {
-//            System.out.println(n);
-//        }
+        for (int n : arr)
+        {
+            System.out.println(n);
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        int N = Integer.parseInt(args[0]);
+        Integer[] arr = SortUtil.randomIntArray(N);
+        System.out.println(String.format("shell sort %d length array", N));
+        Shell.sortInt(arr);
     }
 }

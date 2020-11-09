@@ -28,8 +28,9 @@ public class Selection
             int min = i;
             for (int j = i + 1; j < arr.length; j++)
             {
-                if (arr[j].compareTo(arr[min]) < 0)
+                if (SortUtil.less(arr[j], arr[min])) {
                     min = j;
+                }
             }
             if (min != i) {
                 SortUtil.exch(arr, min, i);

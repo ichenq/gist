@@ -1,5 +1,7 @@
 package com.example.chapter2;
 
+import edu.princeton.cs.algs4.StdRandom;
+
 public class SortUtil
 {
     public static boolean less(Comparable a, Comparable b)
@@ -32,5 +34,14 @@ public class SortUtil
                 return false;
         }
         return true;
+    }
+
+    public static Integer[] randomIntArray(int N)
+    {
+        Integer[] arr = new Integer[N];
+        for (int i = 0; i < N; i++) {
+            arr[i] = StdRandom.uniform(100);
+        }
+        return arr;
     }
 }
