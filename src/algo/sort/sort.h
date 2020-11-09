@@ -14,19 +14,19 @@
 template <typename T>
 void bubbleSort(T a[], int n)
 {
-    for (int i = 0; i < n; i++) 
+    for (int i = n - 1; i > 0; i--) 
     {
-        bool swapped = false;
+        bool has_swap = false;
         // Last i elements are already in place  
-        for (int j = 0; j < n - i - 1; j++)
+        for (int j = 0; j < i; j++)
         {
             if (a[j] > a[j + 1])
             {
                 std::swap(a[j], a[j + 1]);
-                swapped = true;
+                has_swap = true;
             }
         }
-        if (!swapped)  // no data exchange
+        if (!has_swap)  // no data exchange
             break;
     }
 }
@@ -39,11 +39,10 @@ void bubbleSort(T a[], int n)
 template <typename T>
 void selectionSort(T a[], int n)
 {
-    int min_idx = -1;
     // One by one move boundary of unsorted subarray
     for (int i = 0; i < n - 1; i++)
     {
-        min_idx = i;
+        int min_idx = i;
         // Find the minimum element in unsorted array 
         for (int j = i + 1; j < n; j++)
         {
@@ -86,20 +85,21 @@ void insertionSort(T a[], int n)
 template <typename T>
 void shellSort(T a[], int n)
 {
-    // Marcin Ciura's gap sequence
-    const int gaps[] = { 701, 301, 132, 57, 23, 10, 4, 1 };
-    for (int gap : gaps)
+    // Knuth's gap sequence, [1,4,13,40,121,...]
+    int gap = 1;
+    for (; gap < n / 3; gap = 3 * gap + 1)
+        ; // nothing
+    for (; gap > 0; gap /= 3)
     {
         // The first gap elements a[0..gap-1] are already in gapped order
         // keep adding one more element until the entire array is gap sorted
         for (int i = gap; i < n; i++)
         {
-            T tmp = a[i];
-            int j = i;
-            // shift earlier gap-sorted elements up until the correct location for a[i] is found
-            for (; j >= gap && a[j - gap] > tmp; j -= gap)
-                a[j] = a[j - gap];
-            a[j] = tmp;
+            for (int j = i; j >= gap; j -= gap) {
+                if (arr[j-gap] > arr[j]) {
+                    std::swap(arr[j], arr[j-gap]);
+                }
+            }
         }
     }
 }
