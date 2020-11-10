@@ -87,7 +87,7 @@ void ExternalSort(const char* filename)
 
     // 合并n个有序的小文件成1个有序的大文件
     char sortedFilename[512];
-    sprintf(sortedFilename, "%s.sorted");
+    sprintf(sortedFilename, "%s.sorted", filename);
 
     std::vector<std::shared_ptr<std::ifstream>> iflist;
     for (int i = 0; i < part; i++) {

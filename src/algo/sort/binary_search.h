@@ -4,39 +4,64 @@
 
 #pragma once
 
-#include <assert.h>
 
-// Find value in range [low, high]
+// find target in [0, size)
 template <typename T>
-int BinarySearch(const T* a, int low, int high, const T& value)
+int binary_search(const T arr[], int size, const T& target)
 {
-    // special case
-    if (low == high) { 
-        return a[low] == value ? 0 : -1;
+    int left = 0;
+    int right = size - 1;
+    while (left <= right)
+    {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] == target) {
+            return mid;
+        }
+        else if (arr[mid] < target) {
+            left = mid + 1;   // continue search [mid+1, right]
+        }
+        else if (arr[mid] > target) {
+            right = mid - 1;   // continue search [left, mid-1]
+        }
     }
-    while (low <= high) {
-        int mid = (low + high) / 2;
-        if (a[mid] < value) {
-            low = mid + 1;
-        }
-        else if (value < a[mid]) {
-            high = mid;
-        }
-        else {
-            return mid;     // found
-        }
-    }
-    return -1; // not found
+    return -1;
 }
 
-void unit_test()
+// return [0, size)
+template <typename T>
+int binary_search_lower_bound(const T arr[], int size, const T& target)
 {
-    int array[] = { 1, 2, 3, 4, 5, 6, 7 };
-    int idx = 0;
-    idx = BinarySearch(array, 0, 7, 4);
-    assert(idx == 3);
-    idx = BinarySearch(array, 0, 0, 0);
-    assert(idx == -1);
-    idx = BinarySearch(array, 0, 1, 1);
-    assert(idx == 0);
+    int left = 0;
+    int right = size;
+    while (left < right)
+    {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] >= target) {
+            right = mid;    // continue search [left, mid)
+        }
+        else if (arr[mid] < target) {
+            left = mid + 1;   // continue search [mid+1, right)
+        }
+    }
+    return left; // indicates how many number less than `target`
+}
+
+// returns [0, size]
+template <typename T>
+int binary_search_upper_bound(const T arr[], int size, const T& target)
+{
+    int left = 0;
+    int right = size;
+    while (left < right)
+    {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] <= target) {
+            left = mid + 1;     // continue search [mid+1, right)
+        }
+        else if (arr[mid] > target) {
+            right = mid;  // continue search [left, mid)
+        }
+    }
+    // `right` indicates how many number less than or equal to `target`
+    return right;
 }

@@ -5,6 +5,7 @@
 #pragma once
 
 #include <algorithm>  // std::swap
+#include "binary_search.h"
 
 // Bubble Sort is the simplest sorting algorithm that works by repeatedly swapping 
 // the adjacent elements if they are in wrong order.
@@ -12,7 +13,7 @@
 //  Best-case performance	 §°(n)  comparisons, §°(1) swaps
 //  Average performance	     §°(n2) comparisons, §°(n2) swaps
 template <typename T>
-void bubbleSort(T a[], int n)
+void bubble_sort(T a[], int n)
 {
     for (int i = n - 1; i > 0; i--) 
     {
@@ -26,8 +27,9 @@ void bubbleSort(T a[], int n)
                 has_swap = true;
             }
         }
-        if (!has_swap)  // no data exchange
+        if (!has_swap) {  // no data exchange
             break;
+        }
     }
 }
 
@@ -37,7 +39,7 @@ void bubbleSort(T a[], int n)
 //      Best-case performance	§°(n2) comparisons, §°(n) swaps
 //      Average performance	    §°(n2) comparisons, §°(n) swaps
 template <typename T>
-void selectionSort(T a[], int n)
+void selection_sort(T a[], int n)
 {
     // One by one move boundary of unsorted subarray
     for (int i = 0; i < n - 1; i++)
@@ -46,11 +48,13 @@ void selectionSort(T a[], int n)
         // Find the minimum element in unsorted array 
         for (int j = i + 1; j < n; j++)
         {
-            if (a[j] < a[min_idx])
+            if (a[j] < a[min_idx]) {
                 min_idx = j;
+            }
         }
-        if (min_idx != i)
+        if (min_idx != i) {
             std::swap(a[min_idx], a[i]);
+        }
     }
 }
 
@@ -65,7 +69,7 @@ void selectionSort(T a[], int n)
 //	3) adaptive && online
 //	4) stable
 template <typename T>
-void insertionSort(T a[], int n)
+void insertion_sort(T a[], int n)
 {
     for (int i = 1; i < n; i++)
     {
@@ -82,23 +86,41 @@ void insertionSort(T a[], int n)
     }
 }
 
+// insertion sort with binary search
 template <typename T>
-void shellSort(T a[], int n)
+void insertion_sort_aux(T a[], int n)
+{
+    for (int i = 1; i < n; i++)
+    {
+        int idx = binary_search_lower_bound(a, i, a[i]);
+        if (idx != i)
+        {
+            T tmp = a[i];
+            int j = i - 1;
+            for (; j >= idx; j--) {
+                a[j + 1] = a[j];
+            }
+            a[idx] = tmp;
+        }
+    }
+}
+
+template <typename T>
+void shell_sort(T a[], int n)
 {
     // Knuth's gap sequence, [1,4,13,40,121,...]
     int gap = 1;
     for (; gap < n / 3; gap = 3 * gap + 1)
         ; // nothing
+
     for (; gap > 0; gap /= 3)
     {
         // The first gap elements a[0..gap-1] are already in gapped order
         // keep adding one more element until the entire array is gap sorted
         for (int i = gap; i < n; i++)
         {
-            for (int j = i; j >= gap; j -= gap) {
-                if (arr[j-gap] > arr[j]) {
-                    std::swap(arr[j], arr[j-gap]);
-                }
+            for (int j = i; j >= gap && a[j-gap] > a[j]; j -= gap) {
+                std::swap(a[j], a[j-gap]);
             }
         }
     }
@@ -125,17 +147,17 @@ int partition(T arr[], int lo, int hi)
 }
 
 template <typename T>
-void quickSortImpl(T arr[], int lo, int hi)
+void do_quick_sort(T arr[], int lo, int hi)
 {
     if (lo < hi) {
         int pv = partition(arr, lo, hi);
-        quickSortImpl(arr, lo, pv - 1);
-        quickSortImpl(arr, pv + 1, hi);
+        do_quick_sort(arr, lo, pv - 1);
+        do_quick_sort(arr, pv + 1, hi);
     }
 }
 
 template <typename T>
-void quickSort(T arr[], int n)
+void quick_sort(T arr[], int n)
 {
-    quickSortImpl(arr, 0, n - 1);
+    do_quick_sort(arr, 0, n - 1);
 }

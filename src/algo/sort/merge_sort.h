@@ -2,16 +2,17 @@
 // Distributed under the terms and conditions of the Apache License.
 // See accompanying files LICENSE.
 
-#include <assert.h>
+#pragma once
+
 #include <vector>
-#include <algorithm>
+#include <algorithm>    // std::min
 
 // Merge sort with both top-down and bottom-up
 // Complexity: O(N*logN)
 // http://algs4.cs.princeton.edu/22mergesort/
 
 template <typename T>
-void topDownMerge(std::vector<T>& arr, std::vector<T>& tmp, int first, int mid, int last)
+void top_down_merge(T arr[], T tmp[], int first, int mid, int last)
 {
     int i = first, j = mid + 1;
     int k = 0;
@@ -35,20 +36,20 @@ void topDownMerge(std::vector<T>& arr, std::vector<T>& tmp, int first, int mid, 
 }
 
 template <typename T>
-void TopDownMergeSort(std::vector<T>& arr, std::vector<T>& tmp,  int left, int right)
+void top_down_merge_sort(T arr[], T tmp[],  int left, int right)
 {
     if (left < right) {
         int mid = (left + right) / 2;
-        TopDownMergeSort(arr, tmp, left, mid);
-        TopDownMergeSort(arr, tmp, mid + 1, right);
-        topDownMerge(arr, tmp, left, mid, right);
+        top_down_merge_sort(arr, tmp, left, mid);
+        top_down_merge_sort(arr, tmp, mid + 1, right);
+        top_down_merge(arr, tmp, left, mid, right);
     }
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-void bottomUpMerge(std::vector<T>& A, std::vector<T>& B, int left, int right, int end)
+void bottom_up_merge(T A[], T B[], int left, int right, int end)
 {
     int i = left;
     int j = right;
@@ -66,7 +67,7 @@ void bottomUpMerge(std::vector<T>& A, std::vector<T>& B, int left, int right, in
 }
 
 template <typename T>
-void bottomUpMergeSort(std::vector<T>& A, std::vector<T>& B, int n)
+void bottom_up_merge_sort(T A[], T B[], int n)
 {
     // Each 1-element run in A is already "sorted".
     // Make successively longer sorted runs of length 2, 4, 8, 16... 
@@ -76,7 +77,7 @@ void bottomUpMergeSort(std::vector<T>& A, std::vector<T>& B, int n)
         for (int i = 0; i < n; i = i + 2 * width) {
             // Merge two runs: A[i:i+width-1] and A[i+width:i+2*width-1] to B[]
             // or copy A[i:n-1] to B[] ( if(i+width >= n) )
-            bottomUpMerge(A, B, i, std::min(i+width, n), std::min(i+2*width, n));
+            bottom_up_merge(A, B, i, std::min(i+width, n), std::min(i+2*width, n));
         }
         // Now work array B is full of runs of length 2*width.
         // Copy array B to array A for next iteration.
@@ -88,27 +89,13 @@ void bottomUpMergeSort(std::vector<T>& A, std::vector<T>& B, int n)
 }
 
 template <typename T>
-void MergeSort(std::vector<T>& arr)
+void merge_sort(T arr[], int size)
 {
-    size_t size = arr.size();
-    if (size > 1) {
-        std::vector<T> tmp;
-        tmp.resize(size);
-        TopDownMergeSort(arr, tmp, 0, size - 1);
-        //bottomUpMergeSort(arr, tmp, size);
+    if (size <= 1) {
+        return;
     }
-}
-
-void simple_test()
-{
-    std::vector<int> vec {
-        83, 21, 93, 24, 40, 23, 46,
-        75, 95, 93, 41, 51, 3, 79,
-        67, 54, 
-    };
-    const int N = vec.size();
-    MergeSort(vec);
-    for (int i = 0; i < N - 1; i++) {
-        assert(vec[i] < vec[i + 1]);
-    }
+    std::vector<T> tmp;
+    tmp.resize(size);
+    top_down_merge_sort(arr, (T*)tmp.data(), 0, size - 1);
+    //bottom_up_merge_sort(arr, tmp, size);
 }

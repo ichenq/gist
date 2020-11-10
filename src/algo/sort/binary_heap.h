@@ -4,11 +4,11 @@
 
 #pragma once
 
-#include <algorithm>
+#include <algorithm>    // std::swap
 
 // min heap operation
 template <typename P, typename Pred>
-void heapUp(P arr[], int j, Pred less)
+void heap_up(P arr[], int j, Pred less)
 {
     for (;;) {
         int i = (j - 1) / 2; // parent
@@ -21,7 +21,7 @@ void heapUp(P arr[], int j, Pred less)
 }
 
 template <typename P, typename Pred>
-bool heapDown(P arr[], int i0, int n, Pred less)
+bool heap_down(P arr[], int i0, int n, Pred less)
 {
     int i = i0;
     for (;;) {
@@ -47,6 +47,6 @@ template <typename P, typename Pred>
 void heapify(P arr[], int n, Pred less)
 {
     for (int i = n / 2 - 1; i >= 0; i--) {
-        heapDown(arr, i, n, less);
+        heap_down(arr, i, n, less);
     }
 }
