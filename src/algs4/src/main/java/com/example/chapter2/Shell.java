@@ -1,5 +1,7 @@
 package com.example.chapter2;
 
+import edu.princeton.cs.algs4.*;
+
 // shell sort
 public class Shell
 {
@@ -14,12 +16,12 @@ public class Shell
         for (; gap > 0; gap /= 3)
         {
             int compare_count = 0;
-            //System.out.println(String.format("--------gap %d-----------", gap));
+            StdOut.printf("-------------gap %d-------------\n", gap);
             for (int i = gap; i < N; i++)
             {
                 for (int j = i; j >= gap; j -= gap)
                 {
-                    //System.out.println(String.format("compare and sort index %d <--> %d", j, j-gap));
+                    StdOut.printf("compare and sort index %d <--> %d\n", j, j-gap);
                     compare_count++;
                     if (arr[j] > arr[j-gap]) {
                         int tmp = arr[j];
@@ -29,11 +31,11 @@ public class Shell
                         break;
                     }
                 }
-                //System.out.println("-------------end sort---------------");
+                StdOut.println("-------------end sort---------------\n");
             }
-            //System.out.println(String.format("-------------end gap %d-------------", gap));
-            double rate = (double)(compare_count) / (double)(N);
-            System.out.println(String.format("gap: %d, compare %d, rate: %.2f", gap, compare_count, rate));
+            StdOut.printf("-------------end gap %d-------------\n", gap);
+            //double rate = (double)(compare_count) / (double)(N);
+            //StdOut.printf("gap: %d, compare %d, rate: %.2f", gap, compare_count, rate);
         }
     }
 
@@ -74,20 +76,21 @@ public class Shell
                 118,84,162,30,88,118,31,35,171,197,
         };
         Shell.sortInt(arr);
-        Shell.sort(arr2);
+        //Shell.sort(arr2);
         assert SortUtil.isSorted(arr);
-        assert SortUtil.isSorted(arr2);
-        for (int n : arr)
-        {
-            System.out.println(n);
-        }
+        //assert SortUtil.isSorted(arr2);
+    }
+
+    public static void benchmark(String[] args) {
+        int N = Integer.parseInt(args[0]);
+        Integer[] arr = SortUtil.randomIntArray(N);
+        StdOut.printf("shell sort %d length array\n", N);
+        Shell.sortInt(arr);
     }
 
     public static void main(String[] args)
     {
-        int N = Integer.parseInt(args[0]);
-        Integer[] arr = SortUtil.randomIntArray(N);
-        System.out.println(String.format("shell sort %d length array", N));
-        Shell.sortInt(arr);
+        test();
+        //benchmark(args);
     }
 }

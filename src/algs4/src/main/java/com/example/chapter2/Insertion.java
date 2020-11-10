@@ -1,7 +1,7 @@
 package com.example.chapter2;
 
-import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.Stopwatch;
+import edu.princeton.cs.algs4.*;
+
 
 // insertion sort
 public class Insertion
@@ -92,6 +92,26 @@ public class Insertion
         }
     }
 
+    // recursive insertion sort
+    public static void sort_recursive(Comparable[] arr, int n)
+    {
+        // base case
+        if (n <= 1)
+            return ;
+
+        // sort first n-1 elements
+        sort_recursive(arr, n-1);
+
+        // insert last element to sorted array
+        Comparable last = arr[n-1];
+        int j = n - 2;
+        while (j >= 0 && SortUtil.less(last, arr[j])) {
+            arr[j+1] = arr[j];
+            j--;
+        }
+        arr[j+1] = last;
+    }
+
     public static double benchmarkSort(int N, int T, int method)
     {
         double total = 0.0;
@@ -119,9 +139,9 @@ public class Insertion
         double t1 = benchmarkSort(N, T, 1);
         double t2 = benchmarkSort(N, T, 2);
         double t3 = benchmarkSort(N, T, 3);
-        System.out.println(String.format("direct insertion sort: %.2f", t1));
-        System.out.println(String.format("sentinal insertion sort: %.2f", t2));
-        System.out.println(String.format("binsearch insertion sort: %.2f", t3));
+        StdOut.printf("direct insertion sort: %.2f", t1);
+        StdOut.printf("sentinal insertion sort: %.2f", t2);
+        StdOut.printf("binsearch insertion sort: %.2f", t3);
     }
 
     public static void main(String[] args)

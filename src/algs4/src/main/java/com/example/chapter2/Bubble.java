@@ -41,6 +41,32 @@ public class Bubble
         }
     }
 
+    // recursive bubble sort
+    public static void sort2(Comparable[] arr)
+    {
+        sort_recursive(arr, arr.length);
+    }
+
+    // recursive bubble sort
+    public static void sort_recursive(Comparable[] arr, int n)
+    {
+        // base case
+        if (n == 1) {
+            return ;
+        }
+
+        // one pass of bubble sort.
+        // after this pass, the largest element is bubbled to end.
+        for (int i = 0; i < n - 1; i++)
+        {
+            if (SortUtil.less(arr[i+1], arr[i])) {
+                SortUtil.exch(arr, i, i+1);
+            }
+        }
+        // for remaining array
+        sort_recursive(arr, n - 1);
+    }
+
     public static void main(String[] args)
     {
         int[] arr = {
