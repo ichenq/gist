@@ -1,6 +1,6 @@
 package com.example.chapter2;
 
-// selection sort
+// 选择排序
 public class Selection
 {
     public static void sortInt(int[] arr)

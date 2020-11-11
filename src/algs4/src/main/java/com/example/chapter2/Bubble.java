@@ -1,6 +1,6 @@
 package com.example.chapter2;
 
-// bubble sort
+// 冒泡排序
 public class Bubble
 {
     public static void sortInt(int[] arr)
@@ -41,7 +41,7 @@ public class Bubble
         }
     }
 
-    // recursive bubble sort
+    // 递归版本
     public static void sort2(Comparable[] arr)
     {
         sort_recursive(arr, arr.length);

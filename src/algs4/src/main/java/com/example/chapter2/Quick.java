@@ -1,6 +1,6 @@
 package com.example.chapter2;
 
-// quick sort
+// 快速排序
 public class Quick
 {
     public static void sort(Comparable[] arr)

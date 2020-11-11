@@ -4,6 +4,7 @@ import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class SortUtil
@@ -125,4 +126,14 @@ public class SortUtil
         }
         return arr;
     }
+
+    public static LinkedList<Comparable> arrayToList(Comparable[] arr)
+    {
+        LinkedList<Comparable> list = new LinkedList<>();
+        for (int i = 0; i < arr.length; i++) {
+            list.addLast(arr[i]);
+        }
+        return list;
+    }
+
 }

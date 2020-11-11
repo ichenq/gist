@@ -3,10 +3,10 @@ package com.example.chapter2;
 import edu.princeton.cs.algs4.*;
 
 
-// insertion sort
+// 插入排序
 public class Insertion
 {
-    // Exercise 2.1.26
+    // Exercise 2.1.26 原始int类型版本
     public static void sortInt(int[] arr)
     {
         for (int i = 1; i < arr.length; i++)
@@ -35,9 +35,10 @@ public class Insertion
     }
 
 
-    // Exercise 2.1.24
+    // Exercise 2.1.24 哨兵，去掉内循环中j>0的判断
     public static void sortSentinel(Comparable[] arr)
     {
+        //
         int min = 0;
         for (int i = 1; i < arr.length; i++) {
             if (arr[i].compareTo(arr[min]) < 0) {
@@ -92,7 +93,7 @@ public class Insertion
         }
     }
 
-    // recursive insertion sort
+    // 递归版本
     public static void sort_recursive(Comparable[] arr, int n)
     {
         // base case

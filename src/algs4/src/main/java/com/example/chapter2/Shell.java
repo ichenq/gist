@@ -2,7 +2,7 @@ package com.example.chapter2;
 
 import edu.princeton.cs.algs4.*;
 
-// shell sort
+// 希尔排序
 public class Shell
 {
     public static void sortInt(Integer[] arr)
