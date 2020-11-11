@@ -2,7 +2,7 @@ package com.example.chapter1;
 
 import java.util.*;
 
-
+// 逆波兰表达式
 public class ReversePolish {
     public static String operators = ("+-*/^");
     public static Map<String, Integer> precedence = new HashMap<>();
@@ -27,8 +27,7 @@ public class ReversePolish {
         return "";
     }
 
-    // Exercise 1.3.11
-    // 计算后缀表达式
+    // Exercise 1.3.11 计算后缀表达式
     // 6 5 2 3 + 8 * + 3 + *  ==>
     private static double evaluatePostfix(String expression) {
         ResizingArrayStack<String> stack = new ResizingArrayStack<>();

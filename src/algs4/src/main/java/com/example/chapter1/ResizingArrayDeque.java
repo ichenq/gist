@@ -2,7 +2,7 @@ package com.example.chapter1;
 
 import java.util.*;
 
-// Exercise 1.3.33
+// Exercise 1.3.33 动态数组实现的deque
 public class ResizingArrayDeque<E> implements Iterable<E>
 {
     private E[] a;

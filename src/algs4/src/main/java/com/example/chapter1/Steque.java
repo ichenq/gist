@@ -1,6 +1,6 @@
 package com.example.chapter1;
 
-// Exercise 1.3.32
+// Exercise 1.3.32 以栈为目标的队列
 public class Steque<E>
 {
     static class LinkedNode<E>

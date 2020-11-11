@@ -3,7 +3,7 @@ package com.example.chapter1;
 import java.util.Arrays;
 import java.util.Collections;
 
-// Exercise 1.4.20
+// Exercise 1.4.20 查询双调数组
 public class BitonicSearch
 {
     // 找到双调数组的峰点

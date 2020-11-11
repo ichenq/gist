@@ -2,6 +2,7 @@ package com.example.chapter1;
 
 import java.util.Iterator;
 
+// Exercise 1.3.39 环形缓冲区
 public class RingBuffer<E> implements Iterable<E>
 {
     private E[] buf = null;

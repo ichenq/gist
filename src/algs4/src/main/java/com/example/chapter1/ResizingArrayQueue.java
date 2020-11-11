@@ -1,6 +1,6 @@
 package com.example.chapter1;
 
-// Exercise 1.3.14
+// Exercise 1.3.14 动态数组实现的队列
 public class ResizingArrayQueue<E>
 {
     private E []a = (E[])new Object[1];

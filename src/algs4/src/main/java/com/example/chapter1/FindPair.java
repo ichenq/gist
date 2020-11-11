@@ -17,7 +17,7 @@ public class FindPair
     }
 
     // https://leetcode.com/problems/minimum-absolute-difference/
-    // Exercise 1.4.16 暴力循环 O(N^2)
+    // Exercise 1.4.16 查找最接近的一队 暴力循环 O(N^2)
     public static void closestPair(double[] arr, Result r) {
         for (int i = 0; i < arr.length; i++) {
             for (int j = i + 1; j < arr.length; j++) {
@@ -44,7 +44,7 @@ public class FindPair
         }
     }
 
-    // Exercise 1.4.17 暴力循环 O(N^2)
+    // Exercise 1.4.17 查找最遥远的一对 暴力循环 O(N^2)
     public static void farthestPair(double[] arr, Result r) {
         for (int i = 0; i < arr.length; i++) {
             for (int j = i + 1; j < arr.length; j++) {
@@ -58,7 +58,7 @@ public class FindPair
         }
     }
 
-    // 找出最大和最小的两个值，他们就是最遥远的一对, O(N)
+    // O(N) 找出最大和最小的两个值，他们就是最遥远的一对
     public static void farthestPair2(double[] arr, Result r) {
         double min = Double.MAX_VALUE;
         double max = Double.MIN_VALUE;

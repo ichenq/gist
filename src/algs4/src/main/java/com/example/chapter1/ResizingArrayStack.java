@@ -45,7 +45,7 @@ public class ResizingArrayStack<E> implements Iterable<E>
         return e;
     }
 
-    // Exercise 1.3.47
+    // Exercise 1.3.47 可连接的栈
     public void catenate(ResizingArrayStack<E> other)
     {
         while (!other.isEmpty()) {

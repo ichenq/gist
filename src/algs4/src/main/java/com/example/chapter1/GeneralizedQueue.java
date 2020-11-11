@@ -2,7 +2,7 @@ package com.example.chapter1;
 
 import java.util.Objects;
 
-// Exercise 1.3.38
+
 public class GeneralizedQueue<E>
 {
     private E a[];
@@ -38,6 +38,7 @@ public class GeneralizedQueue<E>
         a[N++] = e;
     }
 
+    // Exercise 1.3.38 删除第k个元素
     public E delete(int k) {
         E value = a[k-1];
         for (int i = k-1; i < N-2; i++)

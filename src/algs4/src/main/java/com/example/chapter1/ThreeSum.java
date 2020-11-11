@@ -2,7 +2,7 @@ package com.example.chapter1;
 
 import java.util.*;
 
-// Exercise 1.4.15
+
 public class ThreeSum
 {
     static class Item implements Comparable<Item>
@@ -46,7 +46,8 @@ public class ThreeSum
         }
     }
 
-    public static void sum2(int[] a, int target, Set<Item> set)
+    // Exercise 1.4.15 快速3-sum
+    public static void fast_sum(int[] a, int target, Set<Item> set)
     {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < a.length; i++) {
@@ -119,7 +120,7 @@ public class ThreeSum
         Set<Item> set2 = new TreeSet<>();
         Set<Item> set3 = new TreeSet<>();
         ThreeSum.sum(arr, target, set1);
-        ThreeSum.sum2(arr, target, set2);
+        ThreeSum.fast_sum(arr, target, set2);
         ThreeSum.sum3(arr, target, set3);
         System.out.println("method1 index: #" + set1.size());
         printSet(set1);

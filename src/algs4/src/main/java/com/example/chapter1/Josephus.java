@@ -1,6 +1,6 @@
 package com.example.chapter1;
 
-// Exercise 1.3.37
+// Exercise 1.3.37 约瑟夫环
 public class Josephus {
 
     class LinkedNode

@@ -1,6 +1,6 @@
 package com.example.chapter1;
 
-// Exercise 1.3.49
+// Exercise 1.3.49 用栈实现队列
 public class StackBasedQueue<E>
 {
     ResizingArrayStack<E> s1 = new ResizingArrayStack<>();

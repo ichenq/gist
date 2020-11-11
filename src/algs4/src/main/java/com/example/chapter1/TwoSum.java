@@ -38,7 +38,7 @@ public class TwoSum
     }
 
     // 使用hashmap, 时间和空间复杂度都为O(N)
-    public static void sum2(int[] a, int target, Set<Item> set)
+    public static void fast_sum(int[] a, int target, Set<Item> set)
     {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < a.length; i++) {
@@ -53,7 +53,7 @@ public class TwoSum
         }
     }
 
-    //
+    //排序+二分查找， O(N*logN)
     public static void sum3(int[] a, int target, Set<Item> set)
     {
         Arrays.sort(a); // quicksort N*ln(N)
@@ -92,7 +92,7 @@ public class TwoSum
         Set<Item> set2 = new TreeSet<>();
         Set<Item> set3 = new TreeSet<>();
         TwoSum.sum(arr, target, set1);
-        TwoSum.sum2(arr, target, set2);
+        TwoSum.fast_sum(arr, target, set2);
         TwoSum.sum3(arr, target, set3);
         System.out.println("calcute twosum of " + target);
         System.out.println("method1 index: #" + set1.size());

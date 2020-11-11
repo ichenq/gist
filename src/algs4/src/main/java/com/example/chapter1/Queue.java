@@ -48,7 +48,7 @@ class Queue<E> implements Iterable<E>
         return item;
     }
 
-    // Exercise 1.3.47
+    // Exercise 1.3.47 可连接的队列
     public void catenate(Queue<E> other)
     {
         while (!other.isEmpty()) {

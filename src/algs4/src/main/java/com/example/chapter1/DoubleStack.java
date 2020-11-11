@@ -1,6 +1,6 @@
 package com.example.chapter1;
 
-// Exercise 1.3.48
+// Exercise 1.3.48 用1个双向队列实现2个栈
 public class DoubleStack<E>
 {
     private Deque<E> deque = new Deque<>();

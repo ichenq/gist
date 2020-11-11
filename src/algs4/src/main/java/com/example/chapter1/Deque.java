@@ -2,7 +2,7 @@ package com.example.chapter1;
 
 import java.util.*;
 
-// Exercise 1.3.33
+// Exercise 1.3.33 实现双向队列
 public class Deque<E> implements Iterable<E>
 {
     class LinkedNode
@@ -89,7 +89,7 @@ public class Deque<E> implements Iterable<E>
         return node.value;
     }
 
-    // Exercise 1.3.47
+    // Exercise 1.3.47 可连接的队列
     public void catenate(Deque<E> other)
     {
         while (!other.isEmpty()) {

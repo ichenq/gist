@@ -63,7 +63,7 @@ public class LinkedList
         return Integer.max(node.value, maxValueRecursive(node.next));
     }
 
-    // 反转单链表
+    // Exercise 1.3.30 反转单链表
     public static LinkedNode reverse(LinkedNode node)
     {
         if (node == null)
