@@ -48,22 +48,22 @@ ListNode* reverseList(ListNode* node) {
 
 // merge 2 sorted linked list
 // https://leetcode.com/problems/merge-two-sorted-lists/
-ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+ListNode* mergeTwoLists(ListNode* left, ListNode* right) {
     ListNode dummy = {};
     ListNode* p = &dummy;
-    while (l1 != NULL && l2 != NULL)
+    while (left != NULL && right != NULL)
     {
-        if (l1->val < l2->val) {
-            p->next = l1;
-            l1 = l1->next;
+        if (left->val < right->val) {
+            p->next = left;
+            left = left->next;
         }
         else {
-            p->next = l2;
-            l2 = l2->next;
+            p->next = right;
+            right = right->next;
         }
         p = p->next;
     }
-    p->next = (l1 == NULL) ? l2 : l1;
+    p->next = (left == NULL) ? right : left;
     return dummy.next;
 }
 
@@ -154,14 +154,13 @@ struct ListNode* deleteDuplicates(struct ListNode* head)
     {
         if (node->val == prev->val)
         {
-            prev->next = node->next;
-            node = node->next;
+            prev->next = node->next; // remove node
         }
         else
         {
             prev = node;
-            node = node->next;
         }
+        node = node->next;
     }
     return head;
 }

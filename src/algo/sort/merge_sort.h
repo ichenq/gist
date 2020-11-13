@@ -88,6 +88,9 @@ void bottom_up_merge_sort(T A[], T B[], int n)
     }
 }
 
+// Worst-case:  O(N logN)
+// Best-case:   O(N logN) - O(N)
+// Average:     O(N logN)
 template <typename T>
 void merge_sort(T arr[], int size)
 {
