@@ -44,8 +44,9 @@ inline int tenpow(int n)
 
 int my_atoi(const char* s)
 {
-    int n = 0;
-
+    if (s == NULL || s[0] == '\0')
+        return 0;
+    
     // skip leading space
     while (is_space(*s))
         s++;
@@ -55,12 +56,22 @@ int my_atoi(const char* s)
     if (sign || *s == '+')
         s++;
 
-    while (is_digit(*s))
+    int64_t n = 0;
+    const char* p = s;
+    while (is_digit(*p))
     {
-        n = n * 10 + (*s - '0');
-        s++;
+        if (p - s > 10) {
+            return sign ? INT_MIN : INT_MAX;
+        }
+        n = n * 10 + (*p - '0');
+        p++;
     }
-    return sign ? -n : n;
+    if (sign) {
+        n = -n < INT_MIN ? INT_MIN : -n;
+    } else {
+        n = n > INT_MAX ? INT_MAX: n;
+    }
+    return n;
 }
 
 double my_atof(const char* s, int len)
